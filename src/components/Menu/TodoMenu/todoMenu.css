@@ -1,0 +1,193 @@
+.todoMenu {
+    background: var(--colorWhiteTransparent75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+
+    padding: 10px;
+
+    z-index: 97;
+    overflow: hidden;
+    position: relative;
+}
+
+.todoMenu__titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    width: 100%;
+    height: 40px;
+}
+
+.todoMenu__title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: 100%;
+
+    padding: 0;
+    margin: 0 10px 0 0;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.todoMenu__todoCounter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.todoMenu__DateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: 40px;
+
+    padding: 0;
+    margin: 10px 0 0 0;
+
+    position: relative;
+}
+
+.todoMenu__monthBtn {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 120px;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.todoMenu__yearContainer {
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: max-content;
+    height: max-content;
+
+    position: absolute;
+    right: 0;
+}
+
+.todoMenu__yearBtn {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    cursor: pointer;
+}
+
+.todoMenu__year {
+    width: max-content;
+    height: max-content;
+
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.todoMenu__monthList {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 130px;
+    height: max-content;
+
+    padding: 10px 10px;
+    margin: 0;
+
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_02);
+
+    position: absolute;
+
+    top: 50px;
+}
+
+.todoMenu__monthList__month {
+    background: var(--color02);
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 90%;
+    height: 25px;
+
+    padding: 0;
+    margin: 5px 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+
+    cursor: pointer;
+}

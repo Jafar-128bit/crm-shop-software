@@ -1,0 +1,147 @@
+:root {
+    --color01: #003465;
+    --color02: #f4f4f4;
+    --color03: #ff9d2e;
+    --color04: #fafafa;
+
+    --colorAlert: #ff252d;
+    --colorWhite: #FFFFFF;
+    --colorBlack: #000000;
+
+    --colorAlertDim: #ffbfc3;
+
+    --colorWhiteTransparent75: rgba(255, 255, 255, 0.75);
+    --colorWhiteTransparent50: rgba(255, 255, 255, 0.5);
+    --colorWhiteTransparent35: rgba(255, 255, 255, 0.35);
+
+    --colorBlackTransparent75: rgba(0, 0, 0, 0.75);
+    --colorBlackTransparent50: rgba(0, 0, 0, 0.5);
+    --colorBlackTransparent35: rgba(0, 0, 0, 0.35);
+
+    --borderRadius01: 15px;
+    --borderRadius02: 6px;
+
+    --shadow_01: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    --shadow_02: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    --shadow_03: rgba(0, 0, 0, 0.45) 0 25px 20px -20px;
+    --shadow_04: 0 0 26px 4px rgba(0, 0, 0, 0.5) inset;
+    --shadow_05: rgb(38, 57, 77) 0px 20px 30px -10px;
+    --shadow_06: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+
+    --backgroundGradient01: linear-gradient(-225deg, #AC32E4 0%, #7918F2 48%, #4801FF 100%);
+    --backgroundGradient02: linear-gradient(to left, #c471f5 0%, #fa71cd 100%);
+    --backgroundGradient03: linear-gradient(-225deg, #20E2D7 0%, #F9FEA5 100%);
+    --backgroundGradient04: linear-gradient(-225deg, #FFFEFF 0%, #D7FFFE 100%);
+}
+
+.app {
+    background-image: url("./assets/background/background01.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
+
+    padding: 25px;
+
+    overflow: hidden;
+    position: relative;
+}
+
+.app__container {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    width: calc(100% - 400px - 15px);
+    height: 100%;
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.app__menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 500px;
+    height: 80%;
+
+    padding: 0;
+
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_06);
+
+    overflow: hidden;
+    position: absolute;
+    top: 100px;
+    right: 25px;
+
+    z-index: 81;
+}
+
+.app__closeBtn {
+    background: var(--colorAlertDim);
+    color: var(--colorAlert);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    cursor: pointer;
+
+    z-index: 99;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.noScroll::-webkit-scrollbar {
+    display: none;
+}
+
+@-webkit-keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
