@@ -29,10 +29,10 @@
     flex-direction: row;
     flex-shrink: 0;
 
-    width: calc(100% - 20px);
+    width: 100%;
     height: 70px;
 
-    padding: 0 10px;
+    padding: 0 0;
     margin: 0;
 
     position: sticky;
@@ -40,7 +40,9 @@
 }
 
 .sidebar__logoContainer__logo {
-    width: 60%;
+    background: var(--colorWhite);
+
+    width: 100%;
     height: 100%;
 
     display: flex;
@@ -53,7 +55,7 @@
 }
 
 .sidebar__logoContainer__logo > img {
-    width: 100%;
+    width: auto;
     height: 90%;
 
     object-fit: contain;

@@ -2,13 +2,23 @@
     --color01: #003465;
     --color02: #f4f4f4;
     --color03: #ff9d2e;
-    --color04: #fafafa;
+    --color04: #f4f4f4;
 
     --colorAlert: #ff252d;
+    --colorAlertDim: #ffbfc3;
     --colorWhite: #FFFFFF;
     --colorBlack: #000000;
 
-    --colorAlertDim: #ffbfc3;
+    --priority-level-1: #2ecc71; /* Green */
+    --priority-level-2: #34c7c7; /* Blue-Green */
+    --priority-level-3: #36a1e1; /* Blue */
+    --priority-level-4: #4682b4; /* Steel Blue */
+    --priority-level-5: #5bc0de; /* Light Blue */
+    --priority-level-6: #f0ad4e; /* Orange */
+    --priority-level-7: #f4a460; /* Sandy Brown */
+    --priority-level-8: #f08080; /* Light Coral */
+    --priority-level-9: #dc143c; /* Crimson */
+    --priority-level-10: #ff0000; /* Red */
 
     --colorWhiteTransparent75: rgba(255, 255, 255, 0.75);
     --colorWhiteTransparent50: rgba(255, 255, 255, 0.5);

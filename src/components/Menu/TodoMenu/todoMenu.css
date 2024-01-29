@@ -21,31 +21,20 @@
 
 .todoMenu__titleContainer {
     display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
     flex-shrink: 0;
 
-    width: 100%;
+    width: calc(100% - 10px);
     height: 40px;
+
+    padding: 0 0 0 10px;
 }
 
 .todoMenu__title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    color: var(--colorBlack);
 
-    width: max-content;
-    height: 100%;
-
-    padding: 0;
-    margin: 0 10px 0 0;
-
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.todoMenu__todoCounter {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -56,9 +45,25 @@
     padding: 0;
     margin: 0;
 
-    font-size: 14px;
-    font-weight: 400;
-    letter-spacing: 1px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.todoMenu__todoCounter {
+    color: var(--colorBlackTransparent75);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: max-content;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 12px;
+    font-weight: 500;
 }
 
 .todoMenu__DateContainer {
@@ -76,7 +81,7 @@
     position: relative;
 }
 
-.todoMenu__monthBtn {
+.todoMenu__dayBtn, .todoMenu__monthBtn {
     background: transparent;
     color: var(--colorBlack);
 
@@ -85,17 +90,31 @@
     justify-content: center;
     flex-direction: row;
 
-    width: 120px;
-    height: max-content;
-
     padding: 0;
     margin: 0;
 
     border: none;
     outline: none;
+}
 
-    font-size: 18px;
-    font-weight: 500;
+.todoMenu__dayBtn {
+    width: 150px;
+    height: max-content;
+
+    font-size: 16px;
+    font-weight: 400;
+
+    cursor: pointer;
+    position: absolute;
+    left: 0;
+}
+
+.todoMenu__monthBtn {
+    width: 120px;
+    height: max-content;
+
+    font-size: 16px;
+    font-weight: 400;
 
     cursor: pointer;
 }
@@ -135,12 +154,18 @@
 }
 
 .todoMenu__year {
-    width: max-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
     height: max-content;
 
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
+    padding: 0;
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .todoMenu__monthList {
@@ -159,10 +184,10 @@
     margin: 0;
 
     border-radius: var(--borderRadius02);
-    box-shadow: var(--shadow_02);
+    box-shadow: var(--shadow_06);
 
+    z-index: 10;
     position: absolute;
-
     top: 50px;
 }
 
@@ -190,4 +215,387 @@
     text-align: center;
 
     cursor: pointer;
+}
+
+.todoMenu__DayContainer {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+
+    width: 85%;
+    height: 370px;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_06);
+
+    overflow: hidden;
+    z-index: 10;
+    position: absolute;
+    top: 120px;
+}
+
+.todoMenu__DayContainer__dayNameList {
+    background: var(--backgroundGradient02);
+
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    column-gap: 10px;
+    place-content: center;
+
+    width: 100%;
+    height: 15%;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.todoMenu__DayContainer__dayName {
+    color: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 30px;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.todoMenu__DayContainer__dayList {
+    display: grid;
+    grid-template-columns: repeat(7, 40px);
+    column-gap: 10px;
+    row-gap: 10px;
+    place-content: center;
+
+    width: 100%;
+    height: 85%;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.todoMenu__DayContainer__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    position: relative;
+}
+
+.todoMenu__DayContainer__day__dayNumber {
+    width: max-content;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.todoMenu__DayContainer__day__remainingTask {
+    background: var(--colorAlert);
+    color: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 16px;
+    height: 16px;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 50%;
+    box-shadow: var(--shadow_02);
+
+    font-size: 12px;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.todoMenu__inputContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: 100%;
+    height: 60px;
+
+    padding: 0;
+    margin: 20px 0 10px 0;
+}
+
+.todoMenu__inputContainer > input[type="text"] {
+    width: calc(100% - 20px - 55px);
+    height: 45px;
+
+    padding: 0 10px;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.todoMenu__inputSubmitBtn {
+    background: var(--backgroundGradient02);
+    color: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 45px;
+    height: 45px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    cursor: pointer;
+}
+
+.todoMenu__todoListContainer {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 15px;
+
+    width: 100%;
+    height: calc(100% - 40px - 50px - 90px - 30px);
+
+    padding: 15px 0;
+
+    border-radius: var(--borderRadius02);
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.todoMenu__todoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: calc(85% - 10px);
+    min-height: 40px;
+
+    padding: 0 5px;
+
+    border-radius: var(--borderRadius02);
+
+    position: relative;
+}
+
+.todoMenu__todoContainer__priorityMenu {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 95%;
+    height: calc(20px + 5px + 40px);
+
+    padding: 10px;
+
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_06);
+
+    z-index: 9;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.todoMenu__todoContainer__priorityTitle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: 100%;
+    height: 20px;
+
+    padding: 0;
+    margin: 0 0 5px 0;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.todoMenu__todoContainer__priorityList {
+    display: grid;
+    grid-template-columns: repeat(10, 30px);
+    gap: 10px;
+    place-content: center;
+    place-items: center;
+
+    width: 100%;
+    height: calc(100% - 20px - 5px);
+}
+
+.todoMenu__todoContainer__priority {
+    color: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 30px;
+    height: 30px;
+
+    border: none;
+    outline: none;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.todoMenu__todoContainer__statusBtn,
+.todoMenu__todoContainer__priorityBtn,
+.todoMenu__todoContainer__editButton,
+.todoMenu__todoContainer__deleteBtn {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 35px;
+    height: 35px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    cursor: pointer;
+}
+
+.todoMenu__todoContainer__statusBtn {
+
+}
+
+.todoMenu__todoContainer__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 0 0;
+
+    width: max-content;
+    height: 90%;
+
+    padding: 5px 5px;
+
+    overflow: hidden;
+}
+
+.todoMenu__todoContainer__content > p {
+    width: 100%;
+    min-height: max-content;
+    max-height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.todoMenu__todoContainer__btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    width: 105px;
+    height: 100%;
+}
+
+.todoMenu__todoContainer__priorityBtn {
+    color: var(--colorWhite);
+
+    width: 25px !important;
+    height: 25px !important;
+
+    border-radius: 50%;
+    margin: 0 5px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.todoMenu__todoContainer__editButton {
+    margin: 0 0;
+}
+
+.todoMenu__todoContainer__deleteBtn {
+    margin: 0 0;
 }

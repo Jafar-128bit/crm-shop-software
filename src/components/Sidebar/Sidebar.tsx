@@ -112,7 +112,6 @@ const Sidebar = (): JSX.Element => {
                         }}
                         whileHover={{
                             background: "var(--backgroundGradient03)",
-                            backgroundSize: "100% 100%",
                             scale: 1.05,
                         }}
                         onClick={() => handleOptionNavigate(option.url)}
@@ -129,7 +128,6 @@ const Sidebar = (): JSX.Element => {
                     whileTap={{scale: 1,}}
                     whileHover={{
                         background: "var(--backgroundGradient03)",
-                        backgroundSize: "100% 100%",
                         scale: 1.05,
                     }}
                     onClick={() => handleOptionNavigate("setting")}
