@@ -17,8 +17,16 @@ import {
     toggleTodoMenu
 } from
         "../../store/slices/menuSlices";
+import useGetTime from "../../hooks/useGetTime";
+import {FormattedDateExtended} from "../../type/type";
 
-const TopInfoBar = (): JSX.Element => {
+type Prop = {
+    calendarData: any;
+}
+
+const TopInfoBar = (prop: Prop): JSX.Element => {
+    const todayDate: FormattedDateExtended = prop.calendarData.getFormattedDate();
+    const getTime: string = useGetTime();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [isImageHover, setIsImageHover] = useState<boolean>(false);
@@ -77,8 +85,12 @@ const TopInfoBar = (): JSX.Element => {
                 className="topInfoBar__sectionContainer section02"
                 onClick={() => handleOpenMenu("dateAndTime")}
             >
-                <p className="topInfoBar__time">11:04:02 AM</p>
-                <p className="topInfoBar__date">02 Jan, 2024</p>
+                <p className="topInfoBar__time">
+                    {getTime}
+                </p>
+                <p className="topInfoBar__date">
+                    {`${todayDate.dayValue} ${todayDate.monthName.split('').slice(0, 3).join('')}, ${todayDate.yearValue}`}
+                </p>
             </section>
             <section className="topInfoBar__sectionContainer section03">
                 <button

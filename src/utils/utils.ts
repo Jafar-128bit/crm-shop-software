@@ -1,26 +1,25 @@
-interface DayData {
-    day: number;
+import {FormattedDate, TaskDataExtended} from "../type/type";
+
+export interface DayData {
+    dayValue: number;
     dayName: number;
 }
 
 export const generateCalendarDataLinear = (year: number, month: number): DayData[] => {
     const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-
     const data: DayData[] = [];
 
-    // Loop through each day of the week
     for (const day of dayIndex) {
-        const daysInMonth: number = new Date(year, month, 0).getDate(); // Get the total number of days in the month
-        // Get the dates for the specific day of the week
+        const daysInMonth: number = new Date(year, month, 0).getDate();
         for (let i: number = 1; i <= daysInMonth; i++) {
             const currentDate: Date = new Date(year, month, i);
             if (currentDate.getDay() === dayIndex.indexOf(day)) {
                 const dayData: DayData = {
-                    day: i,
+                    dayValue: i,
                     dayName: dayIndex[currentDate.getDay()],
                 };
                 data.push(dayData);
-                data.sort((a, b) => a.day - b.day);
+                data.sort((a: DayData, b: DayData) => a.dayValue - b.dayValue);
             }
         }
     }
@@ -28,52 +27,90 @@ export const generateCalendarDataLinear = (year: number, month: number): DayData
     return data;
 };
 
-export const dayArrayData = (dayData: DayData[]): DayData[] => {
-    const numRows = 6;
-    const numCols = 7;
+export const heapSortTaskDataList = (array: Array<TaskDataExtended>, sortOption: "sortByPriority" | "sortByDate"): Array<TaskDataExtended> => {
 
-    let dayDataMatrix: DayData[][] = Array.from({ length: numRows }, () =>
-        Array.from({ length: numCols }, (_, dayName: number) => ({ day: 0, dayName }))
-    );
-    let dayIndex: number = 0;
+    const dateCompare = (date1: FormattedDate, date2: FormattedDate): number => {
+        if (date1.yearValue !== date2.yearValue) return date1.yearValue - date2.yearValue;
+        if (date1.monthId !== date2.monthId) return date1.monthId - date2.monthId;
+        if (date1.dayValue !== date2.dayValue) return date1.dayValue - date2.dayValue;
+        return date1.dayName - date2.dayName;
+    };
 
-    for (let i: number = 0; i < dayDataMatrix.length; i++) {
-        for (let j: number = 0; j < dayDataMatrix[i].length; j++) {
-            if (dayIndex < dayData.length) {
-                dayDataMatrix[i][j].dayName = j;
-                if (dayData[dayIndex].dayName === j) {
-                    dayDataMatrix[i][j].day = dayData[dayIndex].day;
-                    dayIndex += 1;
-                }
-            } else break;
+    const heapify = (array: Array<TaskDataExtended>, i: number, heapSize: number): void => {
+        const left = 2 * i + 1;
+        const right = 2 * i + 2;
+        let largest = i;
+
+        if (sortOption === "sortByPriority") {
+            if (left < heapSize && array[left].priorityLevel > array[largest].priorityLevel) largest = left;
+            if (right < heapSize && array[right].priorityLevel > array[largest].priorityLevel) largest = right;
+            if (largest !== i) {
+                swap(array, i, largest);
+                heapify(array, largest, heapSize);
+            }
+        } else {
+            if (left < heapSize && dateCompare(array[left].createdAt, array[largest].createdAt) > 0) largest = left;
+            if (right < heapSize && dateCompare(array[right].createdAt, array[largest].createdAt) > 0) largest = right;
+
+            if (largest !== i) {
+                swap(array, i, largest);
+                heapify(array, largest, heapSize);
+            }
         }
+    };
+
+    const buildMaxHeap = (array: Array<TaskDataExtended>): void => {
+        const n: number = array.length;
+        for (let i: number = Math.floor(n / 2) - 1; i >= 0; i--) {
+            heapify(array, i, n);
+        }
+    };
+
+    const swap = (array: Array<TaskDataExtended>, i: number, j: number): void => {
+
+        if (sortOption === "sortByPriority") {
+            const temp: number = array[i].priorityLevel;
+            array[i].priorityLevel = array[j].priorityLevel;
+            array[j].priorityLevel = temp;
+        } else {
+            const temp: FormattedDate = array[i].createdAt;
+            array[i].createdAt = array[j].createdAt;
+            array[j].createdAt = temp;
+        }
+    };
+
+    buildMaxHeap(array);
+
+    for (let i = array.length - 1; i > 0; i--) {
+        swap(array, 0, i);
+        heapify(array, 0, i);
     }
 
-    return dayDataMatrix.filter((dayData: DayData[]) => dayData.some((day) => day.day > 0)).flat();
+    return array;
 };
 
-interface FormattedDate {
-    year: number;
-    monthId: number;
-    month: string;
-    dayName: number;
-    day: number;
-}
+export const getFormattedTime = (): string => {
+    const options: Intl.DateTimeFormatOptions = {
+        hour: 'numeric',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true,
+    };
 
-export const getFormattedDate = (): FormattedDate => {
-    const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-    const months: string[] = [
-        'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December',
-    ];
-
-    const currentDate: Date = new Date();
-    const year: number = currentDate.getFullYear();
-    const monthId: number = currentDate.getMonth();
-    const month: string = months[currentDate.getMonth()];
-    const dayName: number = dayIndex[currentDate.getDay()];
-    const day: number = currentDate.getDate();
-
-    return {year, monthId, month, dayName, day};
+    return new Date().toLocaleTimeString('en-US', options);
 };
+
+export const deepClone = <T>(input: T): T => {
+    if (input === null || typeof input !== "object") return input as T;
+    const initialValue = (Array.isArray(input) ? [] : {}) as T;
+    return Object.keys(input).reduce((acc, key) => {
+        // @ts-ignore
+        acc[key] = deepClone(input[key]);
+        return acc;
+    }, initialValue);
+};
+
+
+
 
 

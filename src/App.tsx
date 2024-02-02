@@ -9,14 +9,18 @@ import {useDispatch, useSelector} from "react-redux";
 import Menu from "./components/Menu/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import {toggleDateAndTimeMenu, toggleEmailMenu, toggleMessageMenu, toggleTodoMenu} from "./store/slices/menuSlices";
+import {Calendar, Task} from "./class/class";
 
 function App(): JSX.Element {
+    const calendarData = new Calendar();
+    const taskData = new Task();
+
     const dispatch = useDispatch();
     const menuState = useSelector((state: any) => state.menuSlice);
-    const handleSelectMenu = (): string | null => {
-        if (menuState.dateAndTimeMenu) return "";
-        else if (menuState.messageMenu) return "";
-        else if (menuState.emailMenu) return "";
+    const handleSelectMenu = (): "todoMenu" | "dateMenu" | null => {
+        if (menuState.dateAndTimeMenu) return "dateMenu";
+        else if (menuState.messageMenu) return null;
+        else if (menuState.emailMenu) return null;
         else if (menuState.todoMenu) return "todoMenu";
         else return null;
     }
@@ -47,11 +51,11 @@ function App(): JSX.Element {
                 <button className="app__closeBtn" onClick={handleCloseMenu}>
                     <CloseIcon/>
                 </button>
-                <Menu name={handleSelectMenu()}/>
+                <Menu name={handleSelectMenu()} calendarData={calendarData} taskData={taskData}/>
             </motion.section>
             <Sidebar/>
             <section className="app__container">
-                <TopInfoBar/>
+                <TopInfoBar calendarData={calendarData}/>
                 <Outlet/>
             </section>
         </main>

@@ -13,34 +13,21 @@ import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
-import {JSX, Key, useEffect, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import {motion} from 'framer-motion';
-import {dayArrayData, generateCalendarDataLinear, getFormattedDate} from "../../../utils/utils";
+import {DayData, FormattedDate, TaskDataExtended, WeekData} from "../../../type/type";
+import {useDispatch, useSelector} from "react-redux";
+import {clearTaskData, updateTaskData} from "../../../store/slices/todoDataSlice";
+import {deepClone} from "../../../utils/utils";
+
+type Prop = {
+    calendarData: any;
+    taskData: any;
+}
 
 interface Month {
     id: number;
-    name: string;
-}
-
-interface DayData {
-    day: number;
-    dayName: number;
-}
-
-interface FormattedDate {
-    year: number;
-    monthId: number;
-    month: string;
-    dayName: number;
-    day: number;
-}
-
-interface TaskData {
-    taskId: number;
-    taskData: string;
-    isComplete: boolean;
-    priorityLevel: number;
-    createdAt: FormattedDate;
+    name?: string;
 }
 
 interface TaskEditInfo {
@@ -52,39 +39,26 @@ type PropMonth = {
     isMonth: boolean;
     setMonth: any;
     setIsMonth: any;
+    monthDataArray: any[];
 }
 
 type PropDay = {
     handleSelectDay: any;
+    weekData: WeekData;
     dayData: DayData;
-    day: DayData;
     handleOpenDayList: any;
-    remainingTask: number;
+    remainingTask: any;
+    currentMonthId: number;
+    monthName?: string;
+    currentYear: number;
 }
 
 type PropTask = {
-    taskData: TaskData;
+    taskData: TaskDataExtended;
     handleTask: any;
     setIsTaskValue: any;
     setIsEdit: any;
 }
-
-let taskData: TaskData[] = [];
-
-const monthData: Month[] = [
-    {id: 0, name: "January"},
-    {id: 1, name: "February"},
-    {id: 2, name: "March"},
-    {id: 3, name: "April"},
-    {id: 4, name: "May"},
-    {id: 5, name: "June"},
-    {id: 6, name: "July"},
-    {id: 7, name: "August"},
-    {id: 8, name: "September"},
-    {id: 9, name: "October"},
-    {id: 10, name: "November"},
-    {id: 11, name: "December"},
-];
 
 const MonthList = (prop: PropMonth): JSX.Element => {
     const handleSetMonth = (monthName: Month): void => {
@@ -97,12 +71,12 @@ const MonthList = (prop: PropMonth): JSX.Element => {
         initial={{display: "none", opacity: 0}}
         animate={prop.isMonth ? {display: "flex", opacity: 1} : {display: "none", opacity: 0}}
     >
-        {monthData.map((value, index) =>
+        {prop.monthDataArray.map((value, index) =>
             <motion.button
                 key={index}
                 type="button"
                 className="todoMenu__monthList__month"
-                onClick={() => handleSetMonth({id: value.id, name: value.name})}
+                onClick={() => handleSetMonth({id: value.monthId, name: value.monthName})}
                 whileTap={{
                     scale: 1,
                 }}
@@ -111,61 +85,74 @@ const MonthList = (prop: PropMonth): JSX.Element => {
                     scale: 1.1,
                 }}
             >
-                {value.name}
+                {value.monthName}
             </motion.button>
         )}
     </motion.div>
 }
 const DayButton = (prop: PropDay): JSX.Element => {
-    const handleSelectDate = (): void => {
-        if (prop.dayData.day > 0) {
-            prop.handleSelectDay({day: prop.dayData.day, dayName: prop.dayData.dayName});
+    const handleSelectDate = (value: DayData): void => {
+        if (value.dayValue > 0) {
+            prop.handleSelectDay({dayValue: value.dayValue, dayName: value.dayName});
             prop.handleOpenDayList();
         } else return;
     }
 
     return (
-        <motion.button
-            type="button"
-            className="todoMenu__DayContainer__day"
-            onClick={handleSelectDate}
-            style={{
-                background: (prop.dayData.day === prop.day.day && prop.dayData.dayName === prop.day.dayName)
-                    ? "var(--backgroundGradient02)"
-                    : "transparent",
-                cursor: prop.dayData.day === 0 ? "auto" : "pointer",
-            }}
-            whileTap={{
-                scale: 1,
-            }}
-            whileHover={
-                (prop.dayData.day === prop.day.day && prop.dayData.dayName === prop.day.dayName)
-                    ? {scale: 1,}
-                    : {scale: 1.1}
-            }
-            transition={{duration: 0.1}}
-        >
-            <p className="todoMenu__DayContainer__day__dayNumber" style={{
-                color: (prop.dayData.day === prop.day.day && prop.dayData.dayName === prop.day.dayName)
-                    ? "var(--colorWhite)"
-                    : "var(--colorBlack)",
-                fontWeight: (prop.dayData.day === prop.day.day && prop.dayData.dayName === prop.day.dayName)
-                    ? "600"
-                    : "400",
-            }}>
-                {prop.dayData.day < 10
-                    ? prop.dayData.day === 0
-                        ? ``
-                        : `0${prop.dayData.day}`
-                    : `${prop.dayData.day}`
+        <li className="todoMenu__DayContainer__Week">
+            {prop.weekData.dayArray.map((value: DayData, index: number) => <motion.button
+                key={index}
+                type="button"
+                className="todoMenu__DayContainer__day"
+                onClick={() => handleSelectDate(value)}
+                style={{
+                    background: (value.dayValue === prop.dayData.dayValue && value.dayName === prop.dayData.dayName)
+                        ? "var(--backgroundGradient02)"
+                        : "transparent",
+                    cursor: value.dayValue === 0 ? "auto" : "pointer",
+                }}
+                whileTap={{
+                    scale: 1,
+                }}
+                whileHover={
+                    (value.dayValue === prop.dayData.dayValue && value.dayName === prop.dayData.dayName)
+                        ? {scale: 1,}
+                        : {scale: 1.1}
                 }
-            </p>
-            {prop.remainingTask > 0 &&
-                <p className="todoMenu__DayContainer__day__remainingTask">
-                    {prop.remainingTask}
+                transition={{duration: 0.1}}
+            >
+                <p className="todoMenu__DayContainer__day__dayNumber" style={{
+                    color: (value.dayValue === prop.dayData.dayValue && value.dayName === prop.dayData.dayName)
+                        ? "var(--colorWhite)"
+                        : value.monthId === prop.currentMonthId ? "var(--colorBlack)" : "var(--colorBlackTransparent50)",
+                    fontWeight: (value.dayValue === prop.dayData.dayValue && value.dayName === prop.dayData.dayName)
+                        ? "600"
+                        : "400",
+                }}>
+                    {value.dayValue < 10
+                        ? value.dayValue === 0
+                            ? ``
+                            : `0${value.dayValue}`
+                        : `${value.dayValue}`
+                    }
                 </p>
-            }
-        </motion.button>
+                {prop.remainingTask({
+                        yearValue: prop.currentYear,
+                        monthId: prop.currentMonthId,
+                        dayName: value.dayName,
+                        dayValue: value.dayValue,
+                    }) > 0 &&
+                    <p className="todoMenu__DayContainer__day__remainingTask">
+                        {prop.remainingTask({
+                            yearValue: prop.currentYear,
+                            monthId: prop.currentMonthId,
+                            dayName: value.dayName,
+                            dayValue: value.dayValue,
+                        })}
+                    </p>
+                }
+            </motion.button>)}
+        </li>
     )
 }
 const TaskList = (prop: PropTask): JSX.Element => {
@@ -183,6 +170,8 @@ const TaskList = (prop: PropTask): JSX.Element => {
             editedTaskId: prop.taskData.taskId,
         });
     }
+    const handleChangeTaskStatus = () => prop.handleTask("UPDATE_TASK_STATUS", prop.taskData.taskId);
+
     const iconStyle = {
         height: "20px",
         color: "var(--colorBlack)",
@@ -222,7 +211,7 @@ const TaskList = (prop: PropTask): JSX.Element => {
             <button
                 type="button"
                 className="todoMenu__todoContainer__statusBtn"
-                onClick={() => prop.handleTask("UPDATE_TASK_STATUS", prop.taskData.taskId)}
+                onClick={handleChangeTaskStatus}
             >
                 {
                     prop.taskData.isComplete
@@ -263,24 +252,30 @@ const TaskList = (prop: PropTask): JSX.Element => {
     );
 };
 
-const TodoMenu = (): JSX.Element => {
-    const todayDate: FormattedDate = getFormattedDate();
+const TodoMenu = (prop: Prop): JSX.Element => {
+    const dispatch = useDispatch();
+    const taskDataList = useSelector((state: any) => state.todoDataSlice);
+    console.log(taskDataList.taskData);
+
+    const todayDate: FormattedDate = prop.calendarData.getFormattedDate();
 
     const [isMonth, setIsMonth] = useState<boolean>(false);
     const [month, setMonth] = useState<Month>({
         id: todayDate.monthId,
-        name: todayDate.month
+        name: todayDate.monthName
     });
-    const [year, setYear] = useState<number>(todayDate.year);
-    const [day, setDay] = useState<DayData>({
-        day: todayDate.day,
-        dayName: todayDate.dayName
+    const [year, setYear] = useState<number>(prop.calendarData.getCalendarData().yearValue);
+    const [dayData, setDayData] = useState<DayData>({
+        dayValue: todayDate.dayValue,
+        dayName: todayDate.dayName,
+        weekId: 0,
+        monthId: month.id,
+        dayObjects: [],
     });
     const [isDayList, setIsDayList] = useState<boolean>(false);
-    const dayData: DayData[] = generateCalendarDataLinear(year, month.id);
 
     const [isTaskValue, setIsTaskValue] = useState<string>("");
-    const [isTaskData, setIsTaskData] = useState<TaskData[]>([]);
+    // const [isTaskData, setIsTaskData] = useState<TaskDataExtended[]>([]);
     const [isEdit, setIsEdit] = useState<TaskEditInfo>({
         isTaskEdit: false,
         editedTaskId: undefined,
@@ -292,7 +287,13 @@ const TodoMenu = (): JSX.Element => {
         if (flag === "dec") setYear(year - 1);
         else if (flag === "inc") setYear(year + 1);
     }
-    const handleSelectDay = (dayData: DayData): void => setDay({day: dayData.day, dayName: dayData.dayName});
+    const handleSelectDay = (dayData: DayData): void => setDayData({
+        dayValue: dayData.dayValue,
+        dayName: dayData.dayName,
+        weekId: dayData.weekId,
+        monthId: dayData.monthId,
+        dayObjects: []
+    });
     const handleSelectDayName = (dayIndex: number): string => {
         switch (dayIndex) {
             case 0:
@@ -317,47 +318,24 @@ const TodoMenu = (): JSX.Element => {
         e.preventDefault();
         setIsTaskValue(e.target.value);
     }
-    const handleCheckTaskDate = (): TaskData[] => {
+    const handleCheckTaskDate = (): TaskDataExtended[] => {
         const selectedDate: FormattedDate = {
-            year: year,
+            yearValue: year,
             monthId: month.id,
-            month: month.name,
-            dayName: day.dayName,
-            day: day.day,
+            monthName: month.name,
+            dayName: dayData.dayName,
+            dayValue: dayData.dayValue,
         };
-
-        return isTaskData.filter((task: TaskData) => {
-            if (
-                task.createdAt.year === selectedDate.year &&
-                task.createdAt.monthId === selectedDate.monthId &&
-                task.createdAt.month === selectedDate.month &&
-                task.createdAt.dayName === selectedDate.dayName &&
-                task.createdAt.day === selectedDate.day
-            ) return task;
-        });
-    };
-    const handleGetCompletedTask = (): number => handleCheckTaskDate().filter((element: TaskData) => element.isComplete).length;
-    const handleRemainingTask = (taskDate: FormattedDate): number => {
-        const selectedDateTask = isTaskData.filter((task: TaskData) => {
-            if (
-                task.createdAt.year === taskDate.year &&
-                task.createdAt.monthId === taskDate.monthId &&
-                task.createdAt.month === taskDate.month &&
-                task.createdAt.dayName === taskDate.dayName &&
-                task.createdAt.day === taskDate.day
-            ) return task;
-        });
-
-        return selectedDateTask.length - selectedDateTask.filter((element: TaskData) => element.isComplete).length;
+        return prop.taskData.getTaskByDate(selectedDate);
     }
 
-    const handleTask = (
-        flag: string,
-        taskId?: number,
-        priorityLevel: number = 1,
-    ): void => {
+    const handleGetCompletedTask = (): number => prop.taskData.sortTaskByStatus(handleCheckTaskDate(), "complete")[0].length;
+    const handleRemainingTask = (taskDate: FormattedDate): number => {
+        return prop.taskData.getTaskByDate(taskDate).length - prop.taskData.sortTaskByStatus(handleCheckTaskDate(), "complete")[0].length;
+    }
 
-        const getIndex = (): number => taskData.findIndex((element: TaskData) => element.taskId === taskId);
+    const handleTask = (flag: string, taskId: number = 0, newPriorityLevel: number = 0): void => {
+
         const resetInput = (): void => {
             setIsTaskValue("");
             setIsEdit({
@@ -365,58 +343,38 @@ const TodoMenu = (): JSX.Element => {
                 editedTaskId: undefined,
             });
         };
-        const updateTaskData = (): void => {
-            setIsTaskData([]);
-            setIsTaskData([...taskData]);
-        };
+        const setTaskData = () => {
+            dispatch(clearTaskData());
+            const newData: Array<TaskDataExtended> = deepClone<Array<TaskDataExtended>>(prop.taskData.getAllTask());
+            dispatch(updateTaskData(newData));
+        }
 
         switch (flag) {
             case "ADD_TASK":
                 if (isTaskValue !== "") {
-                    taskData.push({
-                        taskId: taskData.length !== 0 ? taskData[taskData.length - 1].taskId + 1 : 0,
-                        taskData: isTaskValue,
-                        isComplete: false,
-                        priorityLevel: priorityLevel,
-                        createdAt: {
-                            year: year,
-                            monthId: month.id,
-                            month: month.name,
-                            dayName: day.dayName,
-                            day: day.day,
-                        },
-                    });
-                    updateTaskData();
+                    prop.taskData.addTask(isTaskValue);
+                    setTaskData();
                     resetInput();
                 }
                 break;
             case "UPDATE_TASK_CONTENT":
-                if (getIndex() !== -1) {
-                    taskData[getIndex()].taskData = isTaskValue;
-                    updateTaskData();
-                    resetInput();
-                }
+                prop.taskData.updateTaskData(taskId, isTaskValue);
+                setTaskData();
+                resetInput();
                 break;
             case "CHANGE_TASK_PRIORITY":
-                if (getIndex() !== -1) {
-                    taskData[getIndex()].priorityLevel = priorityLevel;
-                    updateTaskData();
-                }
+                prop.taskData.changeTaskPriority(taskId, newPriorityLevel);
+                setTaskData();
                 break;
             case "UPDATE_TASK_STATUS":
-                if (getIndex() !== -1) {
-                    taskData[getIndex()].isComplete
-                        ? taskData[getIndex()].isComplete = false
-                        : taskData[getIndex()].isComplete = true;
-                    updateTaskData();
-                }
+                prop.taskData.changeTaskStatus(taskId, !prop.taskData.getTaskById(taskId).isComplete);
+                setTaskData();
                 break;
             case "REMOVE_TASK":
-                taskData = taskData.filter((task: TaskData) => task.taskId !== taskId);
-                setIsTaskData([...taskData]);
+                prop.taskData.removeTask(taskId);
+                setTaskData();
                 break;
             case "CLEAR_TASK":
-                setIsTaskData([]);
                 break;
             default:
                 break;
@@ -436,7 +394,7 @@ const TodoMenu = (): JSX.Element => {
             </section>
             <section className="todoMenu__DateContainer">
                 <button type="button" className="todoMenu__dayBtn" onClick={handleOpenDayList}>
-                    {`${handleSelectDayName(day.dayName)}, ${day.day}`}
+                    {`${handleSelectDayName(dayData.dayName)}, ${dayData.dayValue}`}
                     <ArrowDropDownRoundedIcon
                         style={{
                             color: "var(--color03)",
@@ -455,7 +413,8 @@ const TodoMenu = (): JSX.Element => {
                         }}
                     />
                 </button>
-                <MonthList isMonth={isMonth} setMonth={setMonth} setIsMonth={setIsMonth}/>
+                <MonthList isMonth={isMonth} setMonth={setMonth} setIsMonth={setIsMonth}
+                           monthDataArray={prop.calendarData.getCalendarData().monthArray}/>
                 <div className="todoMenu__yearContainer">
                     <button type="button" className="todoMenu__yearBtn" onClick={() => handleChangeYear("dec")}>
                         <ArrowLeftIcon style={{color: "var(--color03)", fontSize: "26px"}}/>
@@ -488,20 +447,17 @@ const TodoMenu = (): JSX.Element => {
                 </ul>
                 <ul className="todoMenu__DayContainer__dayList noScroll">
                     {
-                        dayArrayData(dayData)
-                            .map((value: DayData, index: number) => <DayButton
+                        prop.calendarData.getCalendarData().monthArray[month.id].weekArray
+                            .map((value: WeekData, index: number) => <DayButton
                                     key={index}
-                                    day={day}
-                                    dayData={value}
+                                    dayData={dayData}
+                                    weekData={value}
                                     handleSelectDay={handleSelectDay}
                                     handleOpenDayList={handleOpenDayList}
-                                    remainingTask={handleRemainingTask({
-                                        year: year,
-                                        monthId: month.id,
-                                        month: month.name,
-                                        dayName: value.dayName,
-                                        day: value.day,
-                                    })}
+                                    remainingTask={handleRemainingTask}
+                                    currentMonthId={month.id}
+                                    monthName={month.name}
+                                    currentYear={year}
                                 />
                             )
                     }
@@ -528,7 +484,7 @@ const TodoMenu = (): JSX.Element => {
                 {
                     handleCheckTaskDate().length === 0
                         ? <p>No Task Available</p>
-                        : handleCheckTaskDate().map((value: TaskData, index: number) => <TaskList
+                        : handleCheckTaskDate().map((value: TaskDataExtended, index: number) => <TaskList
                             key={index}
                             taskData={value}
                             handleTask={handleTask}
