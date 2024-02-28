@@ -15,7 +15,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 import {JSX, useEffect, useState} from "react";
 import {motion} from 'framer-motion';
-import {DayData, FormattedDate, TaskDataExtended, WeekData} from "../../../type/type";
+import {DayData, FormattedDate, TaskData, WeekData} from "../../../type/type";
 import {useDispatch, useSelector} from "react-redux";
 import {clearTaskData, updateTaskData} from "../../../store/slices/todoDataSlice";
 import {deepClone} from "../../../utils/utils";
@@ -54,7 +54,7 @@ type PropDay = {
 }
 
 type PropTask = {
-    taskData: TaskDataExtended;
+    taskData: TaskData;
     handleTask: any;
     setIsTaskValue: any;
     setIsEdit: any;
@@ -275,7 +275,7 @@ const TodoMenu = (prop: Prop): JSX.Element => {
     const [isDayList, setIsDayList] = useState<boolean>(false);
 
     const [isTaskValue, setIsTaskValue] = useState<string>("");
-    // const [isTaskData, setIsTaskData] = useState<TaskDataExtended[]>([]);
+    // const [isTaskData, setIsTaskData] = useState<TaskData[]>([]);
     const [isEdit, setIsEdit] = useState<TaskEditInfo>({
         isTaskEdit: false,
         editedTaskId: undefined,
@@ -318,7 +318,7 @@ const TodoMenu = (prop: Prop): JSX.Element => {
         e.preventDefault();
         setIsTaskValue(e.target.value);
     }
-    const handleCheckTaskDate = (): TaskDataExtended[] => {
+    const handleCheckTaskDate = (): TaskData[] => {
         const selectedDate: FormattedDate = {
             yearValue: year,
             monthId: month.id,
@@ -345,7 +345,7 @@ const TodoMenu = (prop: Prop): JSX.Element => {
         };
         const setTaskData = () => {
             dispatch(clearTaskData());
-            const newData: Array<TaskDataExtended> = deepClone<Array<TaskDataExtended>>(prop.taskData.getAllTask());
+            const newData: Array<TaskData> = deepClone<Array<TaskData>>(prop.taskData.getAllTask());
             dispatch(updateTaskData(newData));
         }
 
@@ -484,7 +484,7 @@ const TodoMenu = (prop: Prop): JSX.Element => {
                 {
                     handleCheckTaskDate().length === 0
                         ? <p>No Task Available</p>
-                        : handleCheckTaskDate().map((value: TaskDataExtended, index: number) => <TaskList
+                        : handleCheckTaskDate().map((value: TaskData, index: number) => <TaskList
                             key={index}
                             taskData={value}
                             handleTask={handleTask}

@@ -35,12 +35,9 @@ export interface CalendarData {
 }
 
 export interface TaskData {
+    taskId: number;
     taskData: string;
     isComplete: boolean;
     priorityLevel: number;
     createdAt: FormattedDate;
-}
-
-export interface TaskDataExtended extends TaskData {
-    taskId: number;
 }

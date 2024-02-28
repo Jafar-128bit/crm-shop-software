@@ -3,8 +3,6 @@ import './calendarMenu.css';
 import CalendarViewMonthIcon from '@mui/icons-material/CalendarViewMonth';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import ViewDayIcon from '@mui/icons-material/ViewDay';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
 import EventRoundedIcon from '@mui/icons-material/EventRounded';
@@ -13,87 +11,23 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import ClearRoundedIcon from '@mui/icons-material/ClearRounded';
 
 import {motion} from 'framer-motion';
-import {JSX, useState} from "react";
+import {JSX, useEffect, useState} from "react";
 import {DayData, generateCalendarDataLinear} from "../../../utils/utils";
 import {FormattedDate} from "../../../type/type";
+import DayView from "./DayView/DayView";
+import {useDispatch} from "react-redux";
+import {toggleAddProperty} from "../../../store/slices/popUpSlices";
 
 type Prop = {
     calendarData: any;
 }
 
-interface PropDayView {
-    dayData: FormattedDate | null;
-    handleSetDay: any;
-}
-
 type CalendarViewType = "month" | "day" | "week" | null;
 type FlagType = "SET_THIS_DAY" | "SET_NEXT_DAY" | "SET_PREV_DAY";
 
-const DayView = (prop: PropDayView): JSX.Element => {
-    const handleSelectDayName = (dayIndex: number): string => {
-        switch (dayIndex) {
-            case 0:
-                return "Monday";
-            case 1:
-                return "Tuesday";
-            case 2:
-                return "Wednesday";
-            case 3:
-                return "Thursday";
-            case 4:
-                return "Friday";
-            case 5:
-                return "Saturday";
-            case 6:
-                return "Sunday";
-            default:
-                return "";
-        }
-    }
-
-    return (
-        <div className="calendarMenu__dayView">
-            <section className="calendarMenu__dayView__titleContainer">
-                <motion.div className="calendarMenu__dayView__dateContainer">
-                    <button
-                        type="button"
-                        onClick={() => prop.handleSetDay("SET_PREV_DAY")}
-                    >
-                        <ArrowLeftIcon/>
-                    </button>
-                    {
-                        prop.dayData &&
-                        <p>{`${handleSelectDayName(prop.dayData.dayName)} ${prop.dayData.dayValue}, ${prop.dayData.monthName}`}</p>
-                    }
-                    <button
-                        type="button"
-                        onClick={() => prop.handleSetDay("SET_NEXT_DAY")}
-                    >
-                        <ArrowRightIcon/>
-                    </button>
-                </motion.div>
-                <div className="calendarMenu__dayView__dayInfoContainer">
-                    <p>Nothing planned. Click Add</p>
-                </div>
-            </section>
-            <section className="calendarMenu__dayView__timeLineContainer noScroll">
-                <section className="calendarMenu__dayView__timeSlotContainer">
-                    <div className="calendarMenu__dayView__timeSlot">
-                        <span>1 am</span>
-                    </div>
-                </section>
-                <section className="calendarMenu__dayView__timeSlotAreaContainer">
-                    <div className="calendarMenu__dayView__timeSlotArea">
-
-                    </div>
-                </section>
-            </section>
-        </div>
-    );
-}
-
 const CalendarMenu = (prop: Prop): JSX.Element => {
     const todayDate: FormattedDate = prop.calendarData.getFormattedDate();
+    const dispatch = useDispatch();
 
     const day: DayData[] = generateCalendarDataLinear(todayDate.yearValue, todayDate.monthId);
     const defaultIndex: number = day.findIndex((element: DayData) => element.dayValue === todayDate.dayValue && element.dayName === todayDate.dayName);
@@ -126,6 +60,9 @@ const CalendarMenu = (prop: Prop): JSX.Element => {
         }
     };
 
+    const handleCalendarAddProperty = (property: string): void => {
+        dispatch(toggleAddProperty(property));
+    }
 
     return (
         <div className="calendarMenu">
@@ -134,14 +71,26 @@ const CalendarMenu = (prop: Prop): JSX.Element => {
                 initial={{x: 65, opacity: 0}}
                 animate={isAddBtn ? {x: 0, opacity: 1} : {x: 65, opacity: 0}}
             >
-                <button type="button" className="calendarMenu__addPropertyBtn">
-                    <TaskAltIcon style={{color: "var(--color03)", fontSize: "24px"}}/>
+                <button
+                    type="button"
+                    className="calendarMenu__addPropertyBtn"
+                    onClick={() => handleCalendarAddProperty("addTask")}
+                >
+                    <TaskAltIcon style={{color: "var(--color02)", fontSize: "24px"}}/>
                 </button>
-                <button type="button" className="calendarMenu__addPropertyBtn">
-                    <EventRoundedIcon style={{color: "var(--color03)", fontSize: "24px"}}/>
+                <button
+                    type="button"
+                    className="calendarMenu__addPropertyBtn"
+                    onClick={() => handleCalendarAddProperty("addEvent")}
+                >
+                    <EventRoundedIcon style={{color: "var(--color02)", fontSize: "24px"}}/>
                 </button>
-                <button type="button" className="calendarMenu__addPropertyBtn">
-                    <AddAlertRoundedIcon style={{color: "var(--color03)", fontSize: "24px"}}/>
+                <button
+                    type="button"
+                    className="calendarMenu__addPropertyBtn"
+                    onClick={() => handleCalendarAddProperty("addReminder")}
+                >
+                    <AddAlertRoundedIcon style={{color: "var(--color02)", fontSize: "24px"}}/>
                 </button>
             </motion.section>
             <motion.button
@@ -210,7 +159,7 @@ const CalendarMenu = (prop: Prop): JSX.Element => {
                     monthName: todayDate.monthName,
                     dayName: day[calendarDayDataIndex].dayName,
                     dayValue: day[calendarDayDataIndex].dayValue,
-                }} handleSetDay={handleSetDay}/>
+                }} handleSetDay={handleSetDay} todayDate={todayDate}/>
             </section>
         </div>
     );

@@ -1,0 +1,73 @@
+.calendarPropertyTab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+    height: 110px;
+}
+
+.calendarPropertyTab__optionTitle {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: calc(100% - 10px);
+    height: calc(55px - 10px);
+
+    padding: 5px;
+}
+
+.calendarPropertyTab__optionTitle > h1 {
+    width: max-content;
+    height: max-content;
+
+    padding: 0 0 0 20px;
+
+    font-size: 30px;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-align: left;
+}
+
+.calendarPropertyTab__tabOptions {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+
+    width: 100%;
+    height: 45px;
+}
+
+.calendarPropertyTab__tabOptions > button {
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: calc((100% / 3) - 20px);
+    height: 90%;
+
+    border: none;
+    outline: none;
+
+    cursor: pointer;
+}
+
+.calendarPropertyTab__tabOptions > button:hover {
+    text-decoration: underline;
+}
+
+.calendarPropertyTab__tabIndicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: calc(100% - 10px);
+    height: 10px;
+
+    padding: 0 5px;
+}

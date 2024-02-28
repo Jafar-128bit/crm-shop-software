@@ -1,14 +1,11 @@
-import {CalendarData, DayData, FormattedDate, MonthData, WeekData, TaskData, TaskDataExtended} from "../type/type";
+import {CalendarData, DayData, FormattedDate, MonthData, WeekData, TaskData} from "../type/type";
 import {heapSortTaskDataList} from "../utils/utils";
 
 export class Calendar {
-
     public yearValue: number;
-
     constructor() {
         this.yearValue = this.getFormattedDate().yearValue;
     }
-
     public getFormattedDate = (): FormattedDate => {
         const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
         const months: string[] = [
@@ -88,15 +85,10 @@ export class Calendar {
     };
     private generateCalendarDataLinear = (yearValue: number, monthIndex: number): DayData[] => {
         const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-
         const data = [];
-
-        // Get the total number of days in the month
         const daysInMonth: number = new Date(yearValue, monthIndex + 1, 0).getDate();
 
-        // Loop through each day of the week
         for (const day of dayIndex) {
-            // Get the dates for the specific day of the week
             for (let i: number = 1; i <= daysInMonth; i++) {
                 const currentDate: Date = new Date(yearValue, monthIndex, i);
                 if (currentDate.getDay() === dayIndex.indexOf(day)) {
@@ -194,7 +186,6 @@ export class Calendar {
 
         return dayDataList;
     };
-
     protected createDayData(weekIndex: number, monthIndex: number): DayData[] {
         const dayData: DayData[] = this.dayArrayData(this.yearValue, monthIndex, weekIndex);
 
@@ -203,7 +194,6 @@ export class Calendar {
 
         return dayData.slice(firstLimit, secondLimit);
     }
-
     protected createWeekData(monthIndex: number): WeekData[] {
         let weekArray: WeekData[] = [];
         for (let j: number = 1; j <= 6; j++) {
@@ -215,7 +205,6 @@ export class Calendar {
         }
         return weekArray;
     }
-
     protected createMonth(): MonthData[] {
         let monthArray = [];
         for (let i: number = 0; i < 12; i++) {
@@ -232,7 +221,6 @@ export class Calendar {
 
         return monthArray;
     }
-
     public getCalendarData(): CalendarData {
         return {
             yearValue: this.yearValue,
@@ -243,14 +231,14 @@ export class Calendar {
 
 export class Task {
 
-    private taskDataList: Array<TaskDataExtended> = [];
+    private taskDataList: Array<TaskData> = [];
 
     constructor() {
     }
 
-    //all private methods
+    //All private methods
     private getTaskIndex = (taskId: number): number => {
-        return this.taskDataList.findIndex((value: TaskDataExtended) => value.taskId === taskId);
+        return this.taskDataList.findIndex((value: TaskData) => value.taskId === taskId);
     }
 
     //Task Operations
@@ -298,29 +286,29 @@ export class Task {
     }
 
     // Task Sorting
-    public sortTaskByPriority(taskDataArray: Array<TaskDataExtended>, sortBy: "high" | "low"): Array<TaskDataExtended> {
-        const sortedArray: Array<TaskDataExtended> = heapSortTaskDataList(taskDataArray, "sortByPriority");
+    public sortTaskByPriority(taskDataArray: Array<TaskData>, sortBy: "high" | "low"): Array<TaskData> {
+        const sortedArray: Array<TaskData> = heapSortTaskDataList(taskDataArray, "sortByPriority");
         if (sortBy === "high") return sortedArray;
         else return sortedArray.slice().reverse();
     }
 
-    public sortTaskByStatus(taskDataArray: Array<TaskDataExtended>, sortBy: "complete" | "incomplete"): Array<Array<TaskDataExtended>> {
-        const completedTask: Array<TaskDataExtended> = taskDataArray.filter((value: TaskDataExtended) => value.isComplete);
-        const incompleteTask: Array<TaskDataExtended> = taskDataArray.filter((value: TaskDataExtended) => !value.isComplete);
+    public sortTaskByStatus(taskDataArray: Array<TaskData>, sortBy: "complete" | "incomplete"): Array<Array<TaskData>> {
+        const completedTask: Array<TaskData> = taskDataArray.filter((value: TaskData) => value.isComplete);
+        const incompleteTask: Array<TaskData> = taskDataArray.filter((value: TaskData) => !value.isComplete);
         if (sortBy === "complete") return [completedTask, incompleteTask];
         else return [incompleteTask, completedTask];
     }
 
-    public sortTaskByDate(sortBy: "latest" | "oldest"): Array<TaskDataExtended> {
-        const sortedArray: Array<TaskDataExtended> = heapSortTaskDataList(this.taskDataList, "sortByDate");
+    public sortTaskByDate(sortBy: "latest" | "oldest"): Array<TaskData> {
+        const sortedArray: Array<TaskData> = heapSortTaskDataList(this.taskDataList, "sortByDate");
         if (sortBy === "latest") return sortedArray;
         else return sortedArray.slice().reverse();
     }
 
     //Task Reading
 
-    public getTaskByDate(date: FormattedDate): Array<TaskDataExtended> {
-        return this.taskDataList.filter((value: TaskDataExtended) => {
+    public getTaskByDate(date: FormattedDate): Array<TaskData> {
+        return this.taskDataList.filter((value: TaskData) => {
             if (
                 value.createdAt.yearValue === date.yearValue &&
                 value.createdAt.monthId === date.monthId &&
@@ -330,11 +318,11 @@ export class Task {
         });
     }
 
-    public getTaskById(taskId: number): TaskDataExtended {
+    public getTaskById(taskId: number): TaskData {
         return this.taskDataList[this.getTaskIndex(taskId)];
     }
 
-    public getAllTask(): Array<TaskDataExtended> {
+    public getAllTask(): Array<TaskData> {
         return this.taskDataList;
     }
 

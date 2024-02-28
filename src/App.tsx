@@ -10,6 +10,7 @@ import Menu from "./components/Menu/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import {toggleDateAndTimeMenu, toggleEmailMenu, toggleMessageMenu, toggleTodoMenu} from "./store/slices/menuSlices";
 import {Calendar, Task} from "./class/class";
+import PopUps from "./components/PopUps/PopUps";
 
 function App(): JSX.Element {
     const calendarData = new Calendar();
@@ -58,6 +59,7 @@ function App(): JSX.Element {
                 <TopInfoBar calendarData={calendarData}/>
                 <Outlet/>
             </section>
+            <PopUps/>
         </main>
     );
 }

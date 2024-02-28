@@ -1,4 +1,4 @@
-import {FormattedDate, TaskDataExtended} from "../type/type";
+import {FormattedDate, TaskData} from "../type/type";
 
 export interface DayData {
     dayValue: number;
@@ -27,7 +27,7 @@ export const generateCalendarDataLinear = (year: number, month: number): DayData
     return data;
 };
 
-export const heapSortTaskDataList = (array: Array<TaskDataExtended>, sortOption: "sortByPriority" | "sortByDate"): Array<TaskDataExtended> => {
+export const heapSortTaskDataList = (array: Array<TaskData>, sortOption: "sortByPriority" | "sortByDate"): Array<TaskData> => {
 
     const dateCompare = (date1: FormattedDate, date2: FormattedDate): number => {
         if (date1.yearValue !== date2.yearValue) return date1.yearValue - date2.yearValue;
@@ -36,7 +36,7 @@ export const heapSortTaskDataList = (array: Array<TaskDataExtended>, sortOption:
         return date1.dayName - date2.dayName;
     };
 
-    const heapify = (array: Array<TaskDataExtended>, i: number, heapSize: number): void => {
+    const heapify = (array: Array<TaskData>, i: number, heapSize: number): void => {
         const left = 2 * i + 1;
         const right = 2 * i + 2;
         let largest = i;
@@ -59,14 +59,14 @@ export const heapSortTaskDataList = (array: Array<TaskDataExtended>, sortOption:
         }
     };
 
-    const buildMaxHeap = (array: Array<TaskDataExtended>): void => {
+    const buildMaxHeap = (array: Array<TaskData>): void => {
         const n: number = array.length;
         for (let i: number = Math.floor(n / 2) - 1; i >= 0; i--) {
             heapify(array, i, n);
         }
     };
 
-    const swap = (array: Array<TaskDataExtended>, i: number, j: number): void => {
+    const swap = (array: Array<TaskData>, i: number, j: number): void => {
 
         if (sortOption === "sortByPriority") {
             const temp: number = array[i].priorityLevel;
@@ -109,6 +109,46 @@ export const deepClone = <T>(input: T): T => {
         return acc;
     }, initialValue);
 };
+
+export const areObjectValuesEqual = (obj1: Record<string, any>, obj2: Record<string, any>): boolean => {
+    const keys: string[] = Object.keys(obj1);
+    return keys.every(key => obj1[key] === obj2[key]);
+}
+
+export const getTimeInAMPMFormat = (): string => {
+    const currentDate: Date = new Date();
+    let hours: number = currentDate.getHours();
+    const minutes: number = currentDate.getMinutes();
+    let period: string = 'am';
+
+    if (hours >= 12) {
+        period = 'pm';
+        if (hours > 12) {
+            hours -= 12;
+        }
+    }
+
+    const formattedHours: string = hours < 10 ? `0${hours}` : `${hours}`;
+
+    return `${formattedHours}-${minutes}-${period}`;
+};
+
+export const getTimeIn24HourFormat = (): string => {
+    const currentDate: Date = new Date();
+    const hours: number = currentDate.getHours();
+    const minutes: number = currentDate.getMinutes();
+
+    const formattedHours: string = hours < 10 ? `0${hours}` : `${hours}`;
+    const formattedMinutes: string = minutes < 10 ? `0${minutes}` : `${minutes}`;
+
+    return `${formattedHours}-${formattedMinutes}`;
+};
+
+export const convertHoursMinutesToMinutes = (timeString: string): number => {
+    const [hours, minutes] = timeString.split('-').map(Number);
+    return hours * 60 + minutes;
+};
+
 
 
 

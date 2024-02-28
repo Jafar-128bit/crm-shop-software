@@ -1,0 +1,196 @@
+.calendarMenu__dayView {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+.calendarMenu__dayView__titleContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: 40px;
+}
+
+.calendarMenu__dayView__dateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 230px;
+    height: 100%;
+
+    position: absolute;
+    left: 0;
+}
+
+.calendarMenu__dayView__dateContainer > button {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 20px;
+    height: 20px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    cursor: pointer;
+}
+
+.calendarMenu__dayView__dateContainer > p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: calc(100% - (20px * 2) - 10px);
+    height: max-content;
+
+    padding: 0;
+    margin: 0 5px;
+
+    font-size: 14px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.calendarMenu__dayView__dayInfoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 200px;
+    height: 100%;
+
+    border-radius: var(--borderRadius02);
+
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+}
+
+.calendarMenu__dayView__dayInfoContainer > p {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.calendarMenu__dayView__timeLineContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: calc(100% - 40px);
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    position: relative;
+}
+
+.calendarMenu__dayView__timeSlotWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: max-content;
+}
+
+.calendarMenu__dayView__timeSlotContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 50px;
+    height: 100%;
+}
+
+.calendarMenu__dayView__timeSlot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 60px;
+
+    border-right: 1px solid var(--colorBlackTransparent35);
+
+    position: relative;
+}
+
+.calendarMenu__dayView__timeSlot > span {
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    position: absolute;
+    bottom: -10.5px;
+
+    z-index: 2;
+}
+
+.calendarMenu__dayView__timeSlotAreaContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc(100% - 50px);
+    height: 100%;
+
+    position: relative;
+}
+
+.calendarMenu__dayView__timeSlotArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 59px;
+}
+
+.calendarMenu__dayView__timeMinuteHand {
+    width: calc(100% - 50px);
+    height: auto;
+
+    border-top: 1px solid var(--colorAlert);
+    border-bottom: 1px solid var(--colorAlert);
+
+    position: absolute;
+    right: 0;
+}
