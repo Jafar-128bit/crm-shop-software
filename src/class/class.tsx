@@ -1,11 +1,21 @@
-import {CalendarData, DayData, FormattedDate, MonthData, WeekData, TaskData} from "../type/type";
+import {
+    CalendarData,
+    DayData,
+    FormattedDate,
+    MonthData,
+    WeekData,
+    TaskData,
+    TreeDataType
+} from "../type/type";
 import {heapSortTaskDataList} from "../utils/utils";
 
 export class Calendar {
     public yearValue: number;
+
     constructor() {
         this.yearValue = this.getFormattedDate().yearValue;
     }
+
     public getFormattedDate = (): FormattedDate => {
         const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
         const months: string[] = [
@@ -186,6 +196,7 @@ export class Calendar {
 
         return dayDataList;
     };
+
     protected createDayData(weekIndex: number, monthIndex: number): DayData[] {
         const dayData: DayData[] = this.dayArrayData(this.yearValue, monthIndex, weekIndex);
 
@@ -194,6 +205,7 @@ export class Calendar {
 
         return dayData.slice(firstLimit, secondLimit);
     }
+
     protected createWeekData(monthIndex: number): WeekData[] {
         let weekArray: WeekData[] = [];
         for (let j: number = 1; j <= 6; j++) {
@@ -205,6 +217,7 @@ export class Calendar {
         }
         return weekArray;
     }
+
     protected createMonth(): MonthData[] {
         let monthArray = [];
         for (let i: number = 0; i < 12; i++) {
@@ -221,6 +234,7 @@ export class Calendar {
 
         return monthArray;
     }
+
     public getCalendarData(): CalendarData {
         return {
             yearValue: this.yearValue,
@@ -327,3 +341,83 @@ export class Task {
     }
 
 }
+
+class TreeNode {
+    parentId: number | null;
+    nodeId: number;
+    optionData: string;
+    children: TreeNode[];
+    action: (() => void) | null;
+
+    constructor(parentId: number | null, nodeId: number, optionData: string, action: (() => void) | null = null) {
+        this.parentId = parentId;
+        this.nodeId = nodeId;
+        this.optionData = optionData;
+        this.children = [];
+        this.action = action;
+    }
+}
+
+export class OptionTree {
+    root: TreeNode | null = null;
+
+    private getTreeFromNode(node: TreeNode | null): TreeDataType[] {
+        return node ? (node.children.map(child => ({
+            parentId: child.parentId,
+            nodeId: child.nodeId,
+            optionData: child.optionData,
+            children: this.getTreeFromNode(child),
+            action: child.action,
+        }))) : [];
+    }
+
+    private findNode(nodeId: number, node: TreeNode | null = this.root): TreeNode | null {
+        if (!node) return null;
+        if (node.nodeId === nodeId) return node;
+
+        for (const child of node.children) {
+            const found = this.findNode(nodeId, child);
+            if (found) return found;
+        }
+
+        return null;
+    }
+
+    public insert(parentId: number | null, nodeId: number, optionData: string, action: (() => void) | null = null): void {
+        const newNode = new TreeNode(parentId, nodeId, optionData, action);
+        if (!this.root) {
+            this.root = newNode;
+            return;
+        }
+
+        if (parentId !== null) {
+            const parent = this.findNode(parentId);
+            if (!parent) throw new Error(`Parent node with ID ${parentId} not found`);
+            parent.children.push(newNode);
+        } else this.root.children.push(newNode);
+    }
+
+    public preorder(node: TreeNode | null = this.root, result: string[] = []): string[] {
+        if (!node) return result;
+        result.push(node.optionData);
+        for (const child of node.children) {
+            this.preorder(child, result);
+        }
+
+        return result;
+    }
+
+    public getTree(): TreeDataType[] {
+        if (!this.root) return [];
+
+        const treeFromNode: TreeDataType[] = this.getTreeFromNode(this.root);
+        return treeFromNode ? [{
+            parentId: this.root.parentId,
+            nodeId: this.root.nodeId,
+            optionData: this.root.optionData,
+            children: treeFromNode,
+            action: this.root.action
+        }] : [];
+    }
+}
+

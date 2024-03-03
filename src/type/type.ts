@@ -41,3 +41,14 @@ export interface TaskData {
     priorityLevel: number;
     createdAt: FormattedDate;
 }
+
+export interface NodeDataType {
+    parentId: number | null;
+    nodeId: number;
+    optionData: string;
+    action: (() => void) | null;
+}
+
+export interface TreeDataType extends NodeDataType{
+    children: TreeDataType[],
+}

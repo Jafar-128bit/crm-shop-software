@@ -1,0 +1,150 @@
+.actionTab {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    width: max-content;
+    height: max-content;
+
+    padding: 10px;
+}
+
+.actionTab__actionTitle {
+    color: var(--colorBlack);
+    margin: 0 5px 0 0;
+
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.actionTab__mainOptionList {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    width: max-content;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+}
+
+.actionTab__mainOptions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 120px;
+    height: 30px;
+
+    margin: 0 5px;
+
+    position: relative;
+}
+
+.actionTab__mainOptionBtn {
+    background: transparent;
+    color: var(--colorBlack);
+
+    width: 100%;
+    height: 100%;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+.actionTab__subOptionList {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+    width: 200px;
+    height: max-content;
+
+    padding: 2px 0;
+    margin: 0;
+
+    box-shadow: var(--shadow_02);
+    border-radius: var(--borderRadius02);
+
+    position: absolute;
+    top: 35px;
+    left: 0;
+}
+
+.actionTab__subOptionList > li, .actionTab__subSubOptionList > li {
+    width: 100%;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    list-style: none;
+    position: relative;
+}
+
+.actionTab__subOptions {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: calc(100% - 10px);
+    height: 30px;
+
+    margin: 2px 0;
+    padding: 0 5px;
+
+    border: none;
+    outline: none;
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.actionTab__subOptions:hover {
+    transition: all 0.1s ease-in-out;
+    background: var(--color01);
+    color: var(--colorWhite);
+}
+
+.actionTab__subSubOptionList {
+    background: var(--colorWhite);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+    width: 200px;
+    height: max-content;
+
+    padding: 2px 0;
+    margin: 0;
+
+    box-shadow: var(--shadow_01);
+    border-radius: var(--borderRadius02);
+
+    position: absolute;
+    right: -100%;
+    top: 0;
+}

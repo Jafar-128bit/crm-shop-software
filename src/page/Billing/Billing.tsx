@@ -1,5 +1,5 @@
 import './billing.css';
-import type {JSX} from "react";
+import {JSX} from "react";
 
 const Billing = (): JSX.Element => {
     return (

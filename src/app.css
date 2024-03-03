@@ -3,6 +3,9 @@
     --color02: #f4f4f4;
     --color03: #ff9d2e;
     --color04: #cccccc;
+    --color05: #36a1e1;
+
+    --color05Dim: rgba(54, 161, 225, 0.25);
 
     --colorAlert: #ff252d;
     --colorAlertDim: #ffbfc3;
@@ -19,6 +22,8 @@
     --priority-level-8: #f08080; /* Light Coral */
     --priority-level-9: #dc143c; /* Crimson */
     --priority-level-10: #ff0000; /* Red */
+
+    --colorTransparent: rgba(0, 0, 0, 0);
 
     --colorWhiteTransparent75: rgba(255, 255, 255, 0.75);
     --colorWhiteTransparent50: rgba(255, 255, 255, 0.5);
@@ -52,13 +57,13 @@
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     flex-direction: row;
 
-    width: calc(100vw - 50px);
-    height: calc(100vh - 50px);
+    width: calc(100vw - 30px);
+    height: calc(100vh - 30px);
 
-    padding: 25px;
+    padding: 15px;
 
     overflow: hidden;
     position: relative;

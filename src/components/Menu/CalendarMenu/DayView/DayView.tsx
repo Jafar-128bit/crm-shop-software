@@ -1,11 +1,12 @@
 import './dayView.css';
-import {JSX, useEffect, useState} from "react";
+import {JSX, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {FormattedDate} from "../../../../type/type";
 import useGetTimeInNumber from "../../../../hooks/useGetTimeInNumber";
 import {areObjectValuesEqual, convertHoursMinutesToMinutes} from "../../../../utils/utils";
 import {motion} from "framer-motion";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import {useSelector} from "react-redux";
 
 type PropTimeSlot = {
     hours: number;
@@ -17,26 +18,11 @@ interface PropDayView {
     todayDate: FormattedDate;
 }
 
-const TimeSlot = (prop: PropTimeSlot): JSX.Element => {
-    let period: string | null = prop.hours < 12 ? "am" : "pm"
-    let hours: number | null = prop.hours < 13 ? prop.hours : prop.hours - 12;
-
-    return <div className="calendarMenu__dayView__timeSlotWrapper">
-        <section className="calendarMenu__dayView__timeSlotContainer">
-            <div className="calendarMenu__dayView__timeSlot">
-                {(prop.hours < 24) && <span>{`${hours} ${period}`}</span>}
-            </div>
-        </section>
-        <section className="calendarMenu__dayView__timeSlotAreaContainer" style={{
-            borderBottom: (prop.hours < 24) ? "1px solid var(--colorBlackTransparent50)" : "none",
-        }}>
-            <div className="calendarMenu__dayView__timeSlotArea"/>
-        </section>
-    </div>
-};
-
 const DayView = (prop: PropDayView): JSX.Element => {
     const todayDate: FormattedDate = prop.todayDate;
+    const dateAndTimeMenuState = useSelector((state: any) => state.menuSlice).dateAndTimeMenu;
+
+    const targetRef = useRef<HTMLDivElement>(null);
     const getTimeIn24HoursFormat: string = useGetTimeInNumber();
     const totalMinutes: number = convertHoursMinutesToMinutes(getTimeIn24HoursFormat);
 
@@ -74,6 +60,30 @@ const DayView = (prop: PropDayView): JSX.Element => {
         setIsDateEqual(areObjectValuesEqual(todayDate, prop.dayData));
 
     }, [prop.dayData, totalMinutes]);
+
+    useLayoutEffect(() => {
+        setTimeout(() => {
+            if (targetRef.current) targetRef.current.scrollIntoView({behavior: 'smooth'});
+        }, 250);
+    }, []);
+
+    const TimeSlot = (prop: PropTimeSlot): JSX.Element => {
+        let period: string | null = prop.hours < 12 ? "am" : "pm"
+        let hours: number | null = prop.hours < 13 ? prop.hours : prop.hours - 12;
+
+        return <div className="calendarMenu__dayView__timeSlotWrapper">
+            <section className="calendarMenu__dayView__timeSlotContainer">
+                <div className="calendarMenu__dayView__timeSlot">
+                    {(prop.hours < 24) && <span>{`${hours} ${period}`}</span>}
+                </div>
+            </section>
+            <section className="calendarMenu__dayView__timeSlotAreaContainer" style={{
+                borderBottom: (prop.hours < 24) ? "1px solid var(--colorBlackTransparent50)" : "none",
+            }}>
+                <div className="calendarMenu__dayView__timeSlotArea" ref={targetRef}/>
+            </section>
+        </div>
+    };
 
     return (
         <div className="calendarMenu__dayView">

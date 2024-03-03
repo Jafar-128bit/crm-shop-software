@@ -10,16 +10,15 @@ import './index.css';
 import App from './App';
 import Login from "./page/Login/Login";
 import Dashboard from "./page/Dashboard/Dashboard";
-import Products from "./page/Products/Products";
+import Inventory from "./page/Inventory/Inventory";
 import Billing from "./page/Billing/Billing";
-import Orders from "./page/Orders/Orders";
 import Analytics from "./page/Analytics/Analytics";
-import Users from "./page/Users/Users";
-import Reservation from "./page/Reservation/Reservation";
-import Delivery from "./page/Delivery/Delivery";
+import Employee from "./page/Employee/Employee";
 import Shipping from "./page/Shipping/Shipping";
 import HelpSupport from "./page/HelpSupport/HelpSupport";
 import Setting from "./page/Setting/Setting";
+import Calendar from "./page/Calendar/Calendar";
+import Payment from "./page/Payment/Payment";
 
 const router = createBrowserRouter([
     {
@@ -35,28 +34,24 @@ const router = createBrowserRouter([
                 element: <Billing/>,
             },
             {
-                path: "/orders",
-                element: <Orders/>,
-            },
-            {
-                path: "/products",
-                element: <Products/>,
+                path: "/inventory",
+                element: <Inventory/>,
             },
             {
                 path: "/analytics",
                 element: <Analytics/>,
             },
             {
-                path: "/users",
-                element: <Users/>,
+                path: "/employee",
+                element: <Employee/>,
             },
             {
-                path: "/reservation",
-                element: <Reservation/>,
+                path: "/payment",
+                element: <Payment/>,
             },
             {
-                path: "/delivery",
-                element: <Delivery/>,
+                path: "/calendar",
+                element: <Calendar/>,
             },
             {
                 path: "/shipping",

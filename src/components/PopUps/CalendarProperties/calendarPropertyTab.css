@@ -38,36 +38,33 @@
     flex-direction: row;
 
     width: 100%;
-    height: 45px;
+    height: 55px;
 }
 
 .calendarPropertyTab__tabOptions > button {
-    color: var(--colorBlack);
+    background: var(--colorWhite);
+    color: var(--color01);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: calc((100% / 3) - 20px);
-    height: 90%;
+    width: calc((100% / 2) - 15px);
+    height: 80%;
 
     border: none;
     outline: none;
+
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_02);
+
+    font-size: 14px;
 
     cursor: pointer;
 }
 
 .calendarPropertyTab__tabOptions > button:hover {
+    background: var(--color01);
+    color: var(--colorWhite);
     text-decoration: underline;
-}
-
-.calendarPropertyTab__tabIndicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: calc(100% - 10px);
-    height: 10px;
-
-    padding: 0 5px;
 }

@@ -1,4 +1,5 @@
-import {FormattedDate, TaskData} from "../type/type";
+import {FormattedDate, NodeDataType, TaskData, TreeDataType} from "../type/type";
+import {OptionTree} from "../class/class";
 
 export interface DayData {
     dayValue: number;
@@ -149,8 +150,12 @@ export const convertHoursMinutesToMinutes = (timeString: string): number => {
     return hours * 60 + minutes;
 };
 
+export const createOptionTree = (optionsData: NodeDataType[]) => {
+    const newTreeInstance = new OptionTree();
 
+    for (let i: number = 0; i < optionsData.length; i++) {
+        newTreeInstance.insert(optionsData[i].parentId, optionsData[i].nodeId, optionsData[i].optionData, optionsData[i].action);
+    }
 
-
-
-
+    return newTreeInstance.getTree()[0];
+};

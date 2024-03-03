@@ -21,8 +21,10 @@
     overflow: hidden;
     overflow-y: auto;
 }
+{/* **************************************** */}
+.sidebar__userContainer {
+    background: var(--colorWhite);
 
-.sidebar__logoContainer {
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -30,7 +32,7 @@
     flex-shrink: 0;
 
     width: 100%;
-    height: 70px;
+    height: 60px;
 
     padding: 0 0;
     margin: 0;
@@ -39,46 +41,62 @@
     top: 0;
 }
 
-.sidebar__logoContainer__logo {
-    background: var(--colorWhite);
-
-    width: 100%;
-    height: 100%;
-
+.sidebar__imageContainer {
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar__logoContainer__logo > img {
-    width: auto;
-    height: 90%;
-
-    object-fit: contain;
-    object-position: center;
-}
-
-.sidebar__logoContainer__menuButton {
-    background: transparent;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
     width: 50px;
     height: 50px;
 
     padding: 0;
-    margin: 0;
+    margin: 0 10px 0 5px;
 
-    border: none;
-    outline: none;
+    box-shadow: var(--shadow_01);
 
     cursor: pointer;
+    overflow: hidden;
+}
+
+.sidebar__imageContainer > img {
+    width: 100%;
+    height: auto;
+
+    object-position: center;
+    object-fit: cover;
+}
+
+.sidebar__userInfoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.sidebar__userInfoContainer > p {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: max-content;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.sidebar__userName {
+    color: var(--colorBlack);
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.sidebar__userEmail {
+    color: var(--colorBlackTransparent75);
+
+    font-size: 12px;
+    font-weight: 400;
 }
 
 .sidebar__shopListContainer {

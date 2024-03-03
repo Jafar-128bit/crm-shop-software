@@ -1,7 +1,8 @@
 import './TodoMenu/TodoMenu';
 import TodoMenu from "./TodoMenu/TodoMenu";
-import {ReactElement} from "react";
 import CalendarMenu from "./CalendarMenu/CalendarMenu";
+
+import {JSX} from "react";
 
 type Prop = {
     name: "todoMenu" | "dateMenu" | null;
@@ -9,7 +10,7 @@ type Prop = {
     taskData: any;
 }
 
-const Menu = (prop: Prop): ReactElement => {
+const Menu = (prop: Prop): JSX.Element => {
     switch (prop.name) {
         case "todoMenu":
             return <TodoMenu calendarData={prop.calendarData} taskData={prop.taskData}/>;

@@ -36,7 +36,11 @@ const CalendarMenu = (prop: Prop): JSX.Element => {
     const [calendarInfoView, setCalendarInfoView] = useState<CalendarViewType>(null);
     const [isAddBtn, setIsAddBtn] = useState<boolean>(false);
 
-    const handleAddBtn = (): void => setIsAddBtn(!isAddBtn);
+    const handleAddBtn = (): void => {
+        setIsAddBtn(!isAddBtn);
+        if (isAddBtn) dispatch(toggleAddProperty(""));
+    }
+
     const handleSetDay = (flag: FlagType, dayIndex: number): void => {
         const setIndex = (direction: "next" | "prev"): void => {
             const newIndex = direction === "next"

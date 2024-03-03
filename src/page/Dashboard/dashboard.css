@@ -1,15 +1,18 @@
 .dashboard {
+    background: var(--colorWhiteTransparent50);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
-    flex-shrink: 0;
 
     width: 100%;
-    height: calc(100% - 60px - 15px);
+    height: 100%;
 
+    border: 1px solid var(--colorWhiteTransparent50);
     border-radius: var(--borderRadius02);
 
-    position: relative;
     overflow: hidden;
 }

@@ -1,18 +1,15 @@
 import './sidebar.css';
 
-import logo from "../../assets/logo/logoNormal.svg";
-
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
-import BookIcon from '@mui/icons-material/Book';
-import DeliveryDiningIcon from '@mui/icons-material/DeliveryDining';
+import BadgeIcon from '@mui/icons-material/Badge';
+import PaymentIcon from '@mui/icons-material/Payment';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SupportIcon from '@mui/icons-material/Support';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
@@ -23,11 +20,15 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import {useState} from "react";
 import type {JSX} from 'react';
 import {motion} from "framer-motion";
-// import {useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import userProfilePicture from "../../assets/image/userProfilePicture.jpeg";
+import {toggleAction} from "../../store/slices/actionTabSlices";
 
 const Sidebar = (): JSX.Element => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [isImageHover, setIsImageHover] = useState<boolean>(false);
     // const sidebar = useSelector((state: any) => state.menuSlice.sidebarState);
 
     const [selectStore, setSelectStore] = useState<boolean>(false);
@@ -35,6 +36,9 @@ const Sidebar = (): JSX.Element => {
     const handleSelectStore = (): void => setSelectStore(!selectStore);
     const handleTheme = (): void => setIsDark(!isDark);
     const handleOptionNavigate = (url: string): void => navigate(url);
+    const handleActivateActionTab = (url: string) => {
+        dispatch(toggleAction(url));
+    }
 
     interface IconStyle {
         color: string;
@@ -54,30 +58,56 @@ const Sidebar = (): JSX.Element => {
     }
 
     const optionsData: OptionsData[] = [
-        {id: 0, optionName: "Dashboard", url: "", icon: <SpaceDashboardIcon style={iconStyle}/>,},
-        {id: 1, optionName: "Billing", url: "billing", icon: <ReceiptLongIcon style={iconStyle}/>,},
-        {id: 2, optionName: "Orders", url: "orders", icon: <ShoppingCartIcon style={iconStyle}/>,},
-        {id: 3, optionName: "Products", url: "products", icon: <Inventory2Icon style={iconStyle}/>,},
+        {id: 1, optionName: "Dashboard", url: "", icon: <SpaceDashboardIcon style={iconStyle}/>,},
+        {id: 2, optionName: "Billing", url: "billing", icon: <ReceiptLongIcon style={iconStyle}/>,},
+        {id: 3, optionName: "Inventory", url: "inventory", icon: <Inventory2Icon style={iconStyle}/>,},
         {id: 4, optionName: "Analytics", url: "analytics", icon: <AnalyticsIcon style={iconStyle}/>,},
-        {id: 5, optionName: "Users", url: "users", icon: <SupervisedUserCircleIcon style={iconStyle}/>,},
-        {id: 6, optionName: "Reservation", url: "reservation", icon: <BookIcon style={iconStyle}/>,},
-        {id: 7, optionName: "Delivery", url: "delivery", icon: <DeliveryDiningIcon style={iconStyle}/>,},
+        {id: 5, optionName: "Employee", url: "employee", icon: <BadgeIcon style={iconStyle}/>,},
+        {id: 6, optionName: "Payment", url: "payment", icon: <PaymentIcon style={iconStyle}/>,},
+        {id: 7, optionName: "Calendar", url: "calendar", icon: <CalendarMonthIcon style={iconStyle}/>,},
         {id: 8, optionName: "Shipping", url: "shipping", icon: <LocalShippingIcon style={iconStyle}/>,},
         {id: 9, optionName: "Help & Support", url: "help&support", icon: <SupportIcon style={iconStyle}/>,},
     ];
 
     return (
         <aside className="sidebar noScroll">
-            <div className="sidebar__logoContainer">
-                <div className="sidebar__logoContainer__logo">
-                    <img src={logo} alt="store sync pro logo"/>
+            <div className="sidebar__userContainer">
+                <div
+                    className="sidebar__imageContainer"
+                    onClick={() => {
+                        handleOptionNavigate("employee");
+                        handleActivateActionTab("employee");
+                    }}
+                    onMouseOver={() => setIsImageHover(true)}
+                    onMouseLeave={() => setIsImageHover(false)}
+                >
+                    <motion.img
+                        src={userProfilePicture}
+                        alt="profile picture"
+                        whileTap={{width: "100%"}}
+                        animate={isImageHover ? {width: "140%",} : {width: "100%",}}
+                    />
                 </div>
-                <button type="button" className="sidebar__logoContainer__menuButton">
-                    <MenuIcon style={{
-                        fontSize: "28px",
-                        color: "var(--colorWhite)",
-                    }}/>
-                </button>
+                <div className="sidebar__userInfoContainer">
+                    <p
+                        className="sidebar__userName"
+                        onClick={() => {
+                            handleOptionNavigate("employee");
+                            handleActivateActionTab("employee");
+                        }}
+                    >
+                        John Watson
+                    </p>
+                    <p
+                        className="sidebar__userEmail"
+                        onClick={() => {
+                            handleOptionNavigate("employee");
+                            handleActivateActionTab("employee");
+                        }}
+                    >
+                        johnwatson99@gmail.com
+                    </p>
+                </div>
             </div>
             <div className="sidebar__shopListContainer">
                 <p className="sidebar__shopListContainer__title">
@@ -114,7 +144,10 @@ const Sidebar = (): JSX.Element => {
                             background: "var(--backgroundGradient03)",
                             scale: 1.05,
                         }}
-                        onClick={() => handleOptionNavigate(option.url)}
+                        onClick={() => {
+                            handleOptionNavigate(option.url);
+                            handleActivateActionTab(option.url);
+                        }}
                     >
                         {option.icon}
                         <p>{option.optionName}</p>
@@ -130,7 +163,10 @@ const Sidebar = (): JSX.Element => {
                         background: "var(--backgroundGradient03)",
                         scale: 1.05,
                     }}
-                    onClick={() => handleOptionNavigate("setting")}
+                    onClick={() => {
+                        handleOptionNavigate("setting");
+                        handleActivateActionTab("setting");
+                    }}
                 >
                     <SettingsRoundedIcon/>
                     <p>Setting</p>
@@ -139,7 +175,10 @@ const Sidebar = (): JSX.Element => {
                     <button
                         type="button"
                         className="sidebar__settingOptions__btn"
-                        onClick={() => handleOptionNavigate("/login")}
+                        onClick={() => {
+                            handleOptionNavigate("login");
+                            handleActivateActionTab("login");
+                        }}
                     >
                         <LogoutRoundedIcon/> Logout
                     </button>

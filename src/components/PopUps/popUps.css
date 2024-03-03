@@ -11,30 +11,5 @@
     width: 100%;
     height: 100%;
 
-    z-index: 99;
     position: absolute;
-}
-
-.popups__calenderPropertyMenu {
-    background: var(--colorWhiteTransparent50);
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-
-    width: 30%;
-    height: 85%;
-
-    border: 1px solid var(--colorWhiteTransparent75);
-    border-radius: var(--borderRadius02);
-    box-shadow: var(--shadow_06);
-
-    overflow: hidden;
-    position: relative;
-}
-
-.popups__calenderPropertyMenu__closeBtn {
-    width: 30px;
-    height: 30px;
 }
