@@ -1,0 +1,133 @@
+.yearView {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: calc(100% - 60px);
+}
+
+.yearView__monthContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 320px);
+    gap: 25px;
+    place-items: center;
+    place-content: flex-start;
+
+    width: max-content;
+    height: calc(100% - 40px);
+
+    padding: 20px 5px;
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.yearView__monthViewCalendar {
+    background: var(--backgroundGradient04);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 320px;
+    height: 350px;
+
+    border-radius: var(--borderRadius02);
+}
+
+.yearView__monthViewCalendar__monthName {
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 15%;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.yearView__monthViewCalendar__dayNameContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 15%;
+}
+
+.yearView__monthViewCalendar__dayName {
+    color: var(--colorBlackTransparent35);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: calc(100% / 7);
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: default;
+}
+
+.yearView__monthViewCalendar__weekContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+}
+
+.yearView__monthViewCalendar__week {
+    display: grid;
+    grid-template-columns: repeat(7, calc(100% / 7));
+    place-content: center;
+    place-items: center;
+
+    width: 100%;
+    height: calc(100% / 6);
+}
+
+.yearView__monthViewCalendar__dayContainer {
+    background: transparent;
+    color: var(--colorBlackTransparent75);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.yearView__monthViewCalendar__dayContainer:hover {
+    background: var(--colorDim02);
+}

@@ -1,0 +1,112 @@
+.calendar__dayView__timeLineContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: calc(100% - 60px);
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    position: relative;
+}
+
+.calendar__dayView__timeSlotWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: max-content;
+}
+
+.calendar__dayView__timeSlotContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 50px;
+    height: 100%;
+}
+
+.calendar__dayView__timeSlot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 60px;
+
+    border-right: 1px solid var(--colorBlackTransparent35);
+
+    position: relative;
+}
+
+.calendar__dayView__timeSlot > span {
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    position: absolute;
+    bottom: -10.5px;
+
+    z-index: 2;
+}
+
+.calendar__dayView__timeSlotAreaContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc(100% - 50px);
+    height: 100%;
+
+    position: relative;
+}
+
+.calendar__dayView__timeSlotArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 59px;
+}
+
+.calendar__dayView__timeMinuteHand {
+    width: calc(100% - 50px);
+    height: auto;
+
+    border-top: 1px solid var(--colorAlert);
+    border-bottom: 1px solid var(--colorAlert);
+
+    position: absolute;
+    right: 0;
+}
+
+.calendar__dayView__timeMinuteDot {
+    background: var(--colorAlert);
+
+    width: 15px;
+    height: 15px;
+
+    border-radius: 50%;
+
+    z-index: 5;
+    position: absolute;
+}
+
+.leftDot {
+    left: 50px;
+}
+
+.rightDot {
+    right: 0;
+}

@@ -3,7 +3,7 @@ import './app.css';
 import {Outlet} from "react-router-dom";
 import Sidebar from "./components/Sidebar/Sidebar";
 import type {JSX} from "react";
-import TopInfoBar from "./assets/TopInfoBar/TopInfoBar";
+import TopInfoBar from "./components/TopInfoBar/TopInfoBar";
 import {motion} from 'framer-motion';
 import {useDispatch, useSelector} from "react-redux";
 import Menu from "./components/Menu/Menu";

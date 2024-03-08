@@ -1,11 +1,14 @@
 :root {
     --color01: #003465;
-    --color02: #f4f4f4;
+    --color02: #f6f6f6;
     --color03: #ff9d2e;
-    --color04: #cccccc;
+    --color04: #ededed;
     --color05: #36a1e1;
 
     --color05Dim: rgba(54, 161, 225, 0.25);
+
+    --colorDim01: rgba(255, 128, 0, 0.15);
+    --colorDim02: rgba(26, 255, 0, 0.15);
 
     --colorAlert: #ff252d;
     --colorAlertDim: #ffbfc3;
@@ -135,28 +138,4 @@
 
 .noScroll::-webkit-scrollbar {
     display: none;
-}
-
-@-webkit-keyframes gradient {
-    0% {
-        background-position: 0 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
-}
-
-@keyframes gradient {
-    0% {
-        background-position: 0 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0 50%;
-    }
 }

@@ -1,0 +1,70 @@
+.monthView {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+    height: calc(100% - 60px);
+}
+
+.monthView__weekContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: calc(100% / 6);
+}
+
+.monthView__dayContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: calc(100% / 7);
+    height: 100%;
+
+    border-bottom: 1px solid var(--colorBlackTransparent35);
+    border-right: 1px solid var(--colorBlackTransparent35);
+}
+
+.monthView__dayName {
+    color: var(--colorBlack);
+
+    padding: 0;
+    margin: 2px 0 0 0;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.monthView__dayValue {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    padding: 0;
+    margin: 5px 0 0 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.monthView__dayValue:hover {
+    background: var(--color04);
+}

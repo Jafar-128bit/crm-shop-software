@@ -1,11 +1,10 @@
 import {
     CalendarData,
     DayData,
-    FormattedDate,
     MonthData,
     WeekData,
     TaskData,
-    TreeDataType
+    TreeDataType, Month, DayDataWithoutWeek
 } from "../type/type";
 import {heapSortTaskDataList} from "../utils/utils";
 
@@ -16,27 +15,13 @@ export class Calendar {
         this.yearValue = this.getFormattedDate().yearValue;
     }
 
-    public getFormattedDate = (): FormattedDate => {
+    public getFormattedDate = (): DayDataWithoutWeek => {
         const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-        const months: string[] = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-        ];
 
         const currentDate: Date = new Date();
         const yearValue: number = currentDate.getFullYear();
-        const monthId: number = currentDate.getMonth();
-        const monthName: string = months[currentDate.getMonth()];
+        const monthId: Month = currentDate.getMonth() as Month;
+        const monthName: string = Month[currentDate.getMonth()];
         const dayName: number = dayIndex[currentDate.getDay()];
         const dayValue: number = currentDate.getDate();
 
@@ -93,7 +78,7 @@ export class Calendar {
             }
         }
     };
-    private generateCalendarDataLinear = (yearValue: number, monthIndex: number): DayData[] => {
+    private generateCalendarDataLinear = (yearValue: number, monthIndex: number): DayDataWithoutWeek[] => {
         const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
         const data = [];
         const daysInMonth: number = new Date(yearValue, monthIndex + 1, 0).getDate();
@@ -102,19 +87,19 @@ export class Calendar {
             for (let i: number = 1; i <= daysInMonth; i++) {
                 const currentDate: Date = new Date(yearValue, monthIndex, i);
                 if (currentDate.getDay() === dayIndex.indexOf(day)) {
-                    const dayData: DayData = {
+                    const dayData = {
+                        yearValue: this.yearValue,
+                        monthName:Month[currentDate.getMonth()],
+                        monthId: currentDate.getMonth() as Month,
                         dayValue: i,
                         dayName: dayIndex[currentDate.getDay()],
-                        weekId: 0,
-                        monthId: 0,
-                        dayObjects: [],
                     };
                     data.push(dayData);
                 }
             }
         }
 
-        data.sort((a: DayData, b: DayData) => a.dayValue - b.dayValue);
+        data.sort((a: DayDataWithoutWeek, b: DayDataWithoutWeek) => a.dayValue - b.dayValue);
         return data;
     };
     private dayArrayData = (year: number, monthIndex: number, weekId: number): DayData[] => {
@@ -126,9 +111,9 @@ export class Calendar {
         let prevMonthIndex: number;
         let nextMonthIndex: number;
 
-        const dayData: DayData[] = this.generateCalendarDataLinear(year, monthIndex);
-        let prevDayData: DayData[] = [];
-        let nextDayData: DayData[] = [];
+        const dayData: DayDataWithoutWeek[] = this.generateCalendarDataLinear(year, monthIndex);
+        let prevDayData: DayDataWithoutWeek[];
+        let nextDayData: DayDataWithoutWeek[];
 
         if (monthIndex === 0) {
             prevMonthIndex = 11;
@@ -155,38 +140,38 @@ export class Calendar {
             for (let j: number = 0; j < numCols; j++) {
                 if (dayIndex < dayData.length) {
                     if (dayData[dayIndex].dayName === j) {
-                        //Current Month Data
                         const arrayData: DayData = {
-                            dayValue: dayData[dayIndex].dayValue,
-                            dayName: j,
-                            weekId: weekId,
+                            yearValue: this.yearValue,
                             monthId: monthIndex,
-                            dayObjects: dayData[dayIndex].dayObjects,
+                            monthName: Month[monthIndex],
+                            weekId: weekId,
+                            dayName: j,
+                            dayValue: dayData[dayIndex].dayValue,
                         }
                         dayDataList.push(arrayData);
                         dayIndex += 1;
                     } else {
-                        //Previous Month Data
                         if (prevDayIndex >= 0) {
                             const arrayData: DayData = {
-                                dayValue: prevDayData[(prevDayData.length - 1) - prevDayIndex].dayValue,
-                                dayName: j,
-                                weekId: weekId,
+                                yearValue: this.yearValue,
                                 monthId: prevMonthIndex,
-                                dayObjects: prevDayData[(prevDayData.length - 1) - prevDayIndex].dayObjects,
+                                monthName: Month[prevMonthIndex],
+                                weekId: weekId,
+                                dayName: j,
+                                dayValue: prevDayData[(prevDayData.length - 1) - prevDayIndex].dayValue,
                             }
                             dayDataList.push(arrayData);
                             prevDayIndex -= 1;
                         }
                     }
                 } else {
-                    //Next Month Data
                     const arrayData: DayData = {
-                        dayValue: nextDayData[nextDayIndex].dayValue,
-                        dayName: j,
-                        weekId: weekId,
+                        yearValue: this.yearValue,
                         monthId: nextMonthIndex,
-                        dayObjects: nextDayData[nextDayIndex].dayObjects,
+                        monthName: Month[nextMonthIndex],
+                        weekId: weekId,
+                        dayName: j,
+                        dayValue: nextDayData[nextDayIndex].dayValue,
                     }
                     dayDataList.push(arrayData);
                     nextDayIndex += 1;
@@ -205,7 +190,6 @@ export class Calendar {
 
         return dayData.slice(firstLimit, secondLimit);
     }
-
     protected createWeekData(monthIndex: number): WeekData[] {
         let weekArray: WeekData[] = [];
         for (let j: number = 1; j <= 6; j++) {
@@ -217,7 +201,6 @@ export class Calendar {
         }
         return weekArray;
     }
-
     protected createMonth(): MonthData[] {
         let monthArray = [];
         for (let i: number = 0; i < 12; i++) {
@@ -234,8 +217,14 @@ export class Calendar {
 
         return monthArray;
     }
-
-    public getCalendarData(): CalendarData {
+    public getCalendarData(yearValue?: number): CalendarData {
+        if (yearValue) {
+            this.yearValue = yearValue;
+            return {
+                yearValue: this.yearValue,
+                monthArray: this.createMonth(),
+            }
+        }
         return {
             yearValue: this.yearValue,
             monthArray: this.createMonth(),
@@ -253,50 +242,6 @@ export class Task {
     //All private methods
     private getTaskIndex = (taskId: number): number => {
         return this.taskDataList.findIndex((value: TaskData) => value.taskId === taskId);
-    }
-
-    //Task Operations
-    public addTask(taskData: string) {
-        if (taskData) {
-            this.taskDataList.push({
-                taskId: this.taskDataList.length !== 0 ? this.taskDataList[this.taskDataList.length - 1].taskId + 1 : 0,
-                taskData: taskData,
-                isComplete: false,
-                priorityLevel: 1,
-                createdAt: new Calendar().getFormattedDate(),
-            });
-        }
-    }
-
-    public updateTaskData(taskId: number, updatedData: string): number {
-        if (updatedData) {
-            if (this.getTaskIndex(taskId) !== -1) {
-                this.taskDataList[this.getTaskIndex(taskId)].taskData = updatedData;
-                return 1;
-            } else return -1;
-        }
-        return 0;
-    }
-
-    public removeTask(taskId: number): number {
-        if (this.getTaskIndex(taskId) !== -1) {
-            this.taskDataList.splice(this.getTaskIndex(taskId), 1);
-            return 1;
-        } else return -1;
-    }
-
-    public changeTaskPriority(taskId: number, newPriority: number): number {
-        if (this.getTaskIndex(taskId) !== -1) {
-            this.taskDataList[this.getTaskIndex(taskId)].priorityLevel = newPriority;
-            return 1;
-        } else return -1;
-    }
-
-    public changeTaskStatus(taskId: number, newStatus: boolean): number {
-        if (this.getTaskIndex(taskId) !== -1) {
-            this.taskDataList[this.getTaskIndex(taskId)].isComplete = newStatus;
-            return 1;
-        } else return -1;
     }
 
     // Task Sorting
@@ -321,7 +266,7 @@ export class Task {
 
     //Task Reading
 
-    public getTaskByDate(date: FormattedDate): Array<TaskData> {
+    public getTaskByDate(date: DayDataWithoutWeek): Array<TaskData> {
         return this.taskDataList.filter((value: TaskData) => {
             if (
                 value.createdAt.yearValue === date.yearValue &&

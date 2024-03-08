@@ -1,26 +1,42 @@
-import {FormattedDate, NodeDataType, TaskData, TreeDataType} from "../type/type";
+import {DayData, NodeDataType, TaskData} from "../type/type";
 import {OptionTree} from "../class/class";
 
-export interface DayData {
-    dayValue: number;
-    dayName: number;
+export const handleSelectDayName = (dayIndex: number): string => {
+    switch (dayIndex) {
+        case 0:
+            return "Monday";
+        case 1:
+            return "Tuesday";
+        case 2:
+            return "Wednesday";
+        case 3:
+            return "Thursday";
+        case 4:
+            return "Friday";
+        case 5:
+            return "Saturday";
+        case 6:
+            return "Sunday";
+        default:
+            return "";
+    }
 }
 
-export const generateCalendarDataLinear = (year: number, month: number): DayData[] => {
+export const generateCalendarDataLinear = (year: number, month: number) => {
     const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-    const data: DayData[] = [];
+    const data = [];
 
     for (const day of dayIndex) {
         const daysInMonth: number = new Date(year, month, 0).getDate();
         for (let i: number = 1; i <= daysInMonth; i++) {
             const currentDate: Date = new Date(year, month, i);
             if (currentDate.getDay() === dayIndex.indexOf(day)) {
-                const dayData: DayData = {
+                const dayData = {
                     dayValue: i,
                     dayName: dayIndex[currentDate.getDay()],
                 };
                 data.push(dayData);
-                data.sort((a: DayData, b: DayData) => a.dayValue - b.dayValue);
+                data.sort((a, b) => a.dayValue - b.dayValue);
             }
         }
     }
@@ -30,7 +46,7 @@ export const generateCalendarDataLinear = (year: number, month: number): DayData
 
 export const heapSortTaskDataList = (array: Array<TaskData>, sortOption: "sortByPriority" | "sortByDate"): Array<TaskData> => {
 
-    const dateCompare = (date1: FormattedDate, date2: FormattedDate): number => {
+    const dateCompare = (date1: DayData, date2: DayData): number => {
         if (date1.yearValue !== date2.yearValue) return date1.yearValue - date2.yearValue;
         if (date1.monthId !== date2.monthId) return date1.monthId - date2.monthId;
         if (date1.dayValue !== date2.dayValue) return date1.dayValue - date2.dayValue;
@@ -74,7 +90,7 @@ export const heapSortTaskDataList = (array: Array<TaskData>, sortOption: "sortBy
             array[i].priorityLevel = array[j].priorityLevel;
             array[j].priorityLevel = temp;
         } else {
-            const temp: FormattedDate = array[i].createdAt;
+            const temp: DayData = array[i].createdAt;
             array[i].createdAt = array[j].createdAt;
             array[j].createdAt = temp;
         }

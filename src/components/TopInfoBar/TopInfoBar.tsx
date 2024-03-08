@@ -2,14 +2,14 @@ import './topInfoBar.css';
 
 import {JSX} from "react";
 import useGetTime from "../../hooks/useGetTime";
-import {FormattedDate} from "../../type/type";
-import ActionTab from "../../components/ActionTab/ActionTab";
+import {DayDataWithoutWeek} from "../../type/type";
+import ActionTab from "../ActionTab/ActionTab";
 import {Calendar} from "../../class/class";
 
 const DateAndTime = (): JSX.Element => {
     const calendarData = new Calendar();
 
-    const todayDate: FormattedDate = calendarData.getFormattedDate();
+    const todayDate: DayDataWithoutWeek = calendarData.getFormattedDate();
     const getTime: string = useGetTime();
     
     return <section className="topInfoBar__sectionContainer section02">

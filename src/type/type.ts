@@ -1,21 +1,18 @@
-export interface FormattedDate {
+export interface DayData {
     yearValue: number;
     monthId: number;
-    monthName?: string;
-    dayName: number;
-    dayValue: number;
-}
-
-export interface FormattedDateExtended extends FormattedDate {
     monthName: string;
+    weekId: number;
+    dayName: number;
+    dayValue: number;
 }
 
-export interface DayData {
-    dayValue: number;
-    dayName: number;
-    weekId: number;
+export interface DayDataWithoutWeek {
+    yearValue: number;
     monthId: number;
-    dayObjects: any[];
+    monthName: string;
+    dayName: number;
+    dayValue: number;
 }
 
 export interface WeekData {
@@ -39,7 +36,7 @@ export interface TaskData {
     taskData: string;
     isComplete: boolean;
     priorityLevel: number;
-    createdAt: FormattedDate;
+    createdAt: DayData;
 }
 
 export interface NodeDataType {
@@ -51,4 +48,19 @@ export interface NodeDataType {
 
 export interface TreeDataType extends NodeDataType{
     children: TreeDataType[],
+}
+
+export enum Month {
+    January = 0,
+    February = 1,
+    March = 2,
+    April = 3,
+    May = 4,
+    June = 5,
+    July = 6,
+    August = 7,
+    September = 8,
+    October = 9,
+    November = 10,
+    December = 11,
 }

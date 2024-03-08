@@ -1,0 +1,172 @@
+.weekView {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: calc(100% - 60px);
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    position: relative;
+}
+
+.weekView__dayListContainer,
+.weekView__dayTimeLineContainer {
+    display: flex;
+    align-items: center;
+}
+
+.weekView__dayListContainer {
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: calc(100% - 50px);
+    height: 15%;
+}
+
+.weekView__dayTimeLineContainer {
+    justify-content: space-between;
+    flex-direction: column;
+
+    width: 100%;
+    height: 85%;
+
+    border-top: 1px solid var(--colorBlackTransparent35);
+
+    overflow: hidden;
+    overflow-y: auto;
+
+    position: relative;
+}
+
+.dayList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc(100% / 7);
+    height: 100%;
+}
+
+.dayList__dayName {
+    color: var(--colorBlackTransparent50);
+
+    width: max-content;
+    height: max-content;
+
+    margin: 0 0 10px 0;
+    padding: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.dayList__dayValueBtn {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    outline: none;
+    border-radius: 50%;
+
+    font-size: 18px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.dayList__dayValueBtn:hover {
+    background: var(--color04);
+}
+
+.weekView__timeSlotWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+
+    width: 100%;
+    height: max-content;
+}
+
+.weekView__timeSlotContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 50px;
+    height: 100%;
+}
+
+.weekView__timeSlot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 50px;
+    height: 60px;
+
+    border-right: 1px solid var(--colorBlackTransparent35);
+
+    position: relative;
+}
+
+.weekView__timeSlot > span {
+    color: var(--colorBlackTransparent50);
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    position: absolute;
+    bottom: -10.5px;
+
+    z-index: 2;
+}
+
+.weekView__timeSlotAreaContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc((100% - 50px) / 7);
+    height: 100%;
+
+    position: relative;
+}
+
+.weekView__timeSlotArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 59px;
+}
+
+.weekView__dayTimeLineContainer__timeMinuteHand {
+    width: calc((100% - 50px) / 7);
+    height: auto;
+
+    border-top: 1px solid var(--colorAlert);
+    border-bottom: 1px solid var(--colorAlert);
+
+    position: absolute;
+}

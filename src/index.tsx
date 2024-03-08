@@ -17,8 +17,8 @@ import Employee from "./page/Employee/Employee";
 import Shipping from "./page/Shipping/Shipping";
 import HelpSupport from "./page/HelpSupport/HelpSupport";
 import Setting from "./page/Setting/Setting";
-import Calendar from "./page/Calendar/Calendar";
-import Payment from "./page/Payment/Payment";
+import Calendar from "./page/Calendar/CalendarPage";
+import Accounting from "./page/Accounting/Accounting";
 
 const router = createBrowserRouter([
     {
@@ -46,8 +46,8 @@ const router = createBrowserRouter([
                 element: <Employee/>,
             },
             {
-                path: "/payment",
-                element: <Payment/>,
+                path: "/accounting",
+                element: <Accounting/>,
             },
             {
                 path: "/calendar",

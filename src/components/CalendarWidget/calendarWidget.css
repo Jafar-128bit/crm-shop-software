@@ -1,0 +1,181 @@
+.calendarWidget {
+    background: var(--backgroundGradient04);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    width: 100%;
+    height: 400px;
+}
+
+.calendarWidget__InfoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    width: calc(100% - 20px);
+    height: 15%;
+
+    padding: 0 10px;
+    margin: 0;
+}
+
+.calendarWidget__monthName {
+    width: 70%;
+    height: max-content;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.calendarWidget__BtnContainer {
+    width: 30%;
+    height: max-content;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    flex-direction: row;
+}
+
+.calendarWidget__btn {
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+    outline: none;
+    border-radius: 50%;
+
+    cursor: pointer;
+}
+
+.calendarWidget__btn:hover {
+    background: var(--color04);
+    transition: all 0.25s ease-in-out;
+}
+
+.calendarWidget__monthContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 100%;
+    height: 85%;
+}
+
+.calendarWidget__monthContainer__dayNameList {
+    display: grid;
+    grid-template-columns: repeat(7, 35px);
+    column-gap: 10px;
+    place-content: center;
+    place-items: center;
+
+    width: 100%;
+    height: 20%;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.calendarWidget__monthContainer__dayName {
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 35px;
+    height: 30px;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+
+    cursor: default;
+}
+
+.calendarWidget__monthContainer__dayList {
+    display: grid;
+    grid-template-rows: repeat(1, 30px);
+    row-gap: 10px;
+    place-content: center;
+    place-items: center;
+
+    width: 100%;
+    height: 80%;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.calendarWidget__monthContainer__weekContainer {
+    display: grid;
+    grid-template-columns: repeat(7, 35px);
+    column-gap: 10px;
+    place-content: center;
+    place-items: center;
+
+    width: 100%;
+    height: 35px;
+
+    list-style: none;
+
+    padding: 0;
+    margin: 0;
+}
+
+.calendarWidget__monthContainer__dayContainer {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 35px;
+    height: 35px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    position: relative;
+}
+
+.calendarWidget__monthContainer__dayContainer:hover {
+    background: var(--color04);
+}

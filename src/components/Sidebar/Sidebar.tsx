@@ -63,7 +63,7 @@ const Sidebar = (): JSX.Element => {
         {id: 3, optionName: "Inventory", url: "inventory", icon: <Inventory2Icon style={iconStyle}/>,},
         {id: 4, optionName: "Analytics", url: "analytics", icon: <AnalyticsIcon style={iconStyle}/>,},
         {id: 5, optionName: "Employee", url: "employee", icon: <BadgeIcon style={iconStyle}/>,},
-        {id: 6, optionName: "Payment", url: "payment", icon: <PaymentIcon style={iconStyle}/>,},
+        {id: 6, optionName: "Accounting", url: "accounting", icon: <PaymentIcon style={iconStyle}/>,},
         {id: 7, optionName: "Calendar", url: "calendar", icon: <CalendarMonthIcon style={iconStyle}/>,},
         {id: 8, optionName: "Shipping", url: "shipping", icon: <LocalShippingIcon style={iconStyle}/>,},
         {id: 9, optionName: "Help & Support", url: "help&support", icon: <SupportIcon style={iconStyle}/>,},
