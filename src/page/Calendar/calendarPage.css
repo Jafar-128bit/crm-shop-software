@@ -12,6 +12,7 @@
     border-radius: var(--borderRadius02);
 
     overflow: hidden;
+    position: relative;
 }
 
 .calendar__sidePanel {
@@ -21,7 +22,7 @@
     flex-direction: column;
     flex-shrink: 0;
 
-    width: 25%;
+    width: 370px;
     height: 100%;
 
     border-right: 1px solid var(--colorBlackTransparent35);

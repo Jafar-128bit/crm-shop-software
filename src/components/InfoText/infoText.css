@@ -1,0 +1,18 @@
+.sidebar__optionNameBox {
+    background: var(--color04);
+    color: var(--colorBlackTransparent75);
+
+    width: max-content;
+    height: max-content;
+
+    padding: 2px 5px;
+
+    border-radius: var(--borderRadius02);
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+
+    position: absolute;
+    z-index: 82;
+}

@@ -366,3 +366,27 @@ export class OptionTree {
     }
 }
 
+export class Stack<T> {
+    private readonly stack: T[];
+
+    constructor() {
+        this.stack = [];
+    }
+
+    public push(item: T): void {
+        this.stack.push(item);
+    }
+
+    public pop(): T | undefined {
+        return this.stack.pop();
+    }
+
+    public peek(): T | undefined {
+        return this.stack[this.stack.length - 1];
+    }
+
+    public isEmpty(): boolean {
+        return this.stack.length === 0;
+    }
+}
+

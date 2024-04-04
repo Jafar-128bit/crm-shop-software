@@ -1,38 +1,44 @@
 import './calendarPage.css';
 import './calendarControlles.css';
 
-import DayView from "./DayView/DayView";
-import {useEffect, JSX} from "react";
-import {useDispatch, useSelector} from "react-redux";
+import React, {JSX, useState} from "react";
 import TimeDate from "../../components/TimeDate/TimeDate";
 import CalendarWidget from "../../components/CalendarWidget/CalendarWidget";
-import {toggleAction} from "../../store/slices/actionTabSlices";
-import WeekView from "./WeekView/WeekView";
-import MonthView from "./MonthView/MonthView";
-import YearView from "./YearView/YearView";
+import {createCalendarContext} from "../../Context/CalendarContext";
+import {CalendarContextProviderProps, DayDataWithoutWeek} from "../../type/type";
+import {Calendar} from "../../class/class";
+import {Outlet} from "react-router-dom";
 
+const calendar = new Calendar();
+const initialDate: DayDataWithoutWeek = calendar.getFormattedDate();
+export const DayDataContext = createCalendarContext<DayDataWithoutWeek>(initialDate);
+export const MonthDataContext = createCalendarContext<number>(initialDate.monthId);
+
+const CalendarDayDataContext: React.FC<CalendarContextProviderProps<DayDataWithoutWeek>> = ({children, initialState}) => {
+    const [dayDataState, setDayDataState] = useState<DayDataWithoutWeek>(initialState);
+    return <DayDataContext.Provider value={{state: dayDataState, setState: setDayDataState}}>
+        {children}
+    </DayDataContext.Provider>
+};
+const CalendarMonthDataContext: React.FC<CalendarContextProviderProps<number>> = ({children, initialState}) => {
+    const [monthDataState, setMonthDataState] = useState<number>(initialState);
+    return <MonthDataContext.Provider value={{state: monthDataState, setState: setMonthDataState}}>
+        {children}
+    </MonthDataContext.Provider>
+}
 
 const CalendarPage = (): JSX.Element => {
-    const actionTabState = useSelector((state: any) => state.actionTabSlice);
-    const viewState = useSelector((state: any) => state.actionTabFunctionSlices).calendarActions.viewAction;
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        if (!actionTabState.calendarActions) dispatch(toggleAction("calendar"));
-    }, []);
-
-    return (
-        <section className="calendar">
-            <section className="calendar__sidePanel">
-                <TimeDate/>
-                <CalendarWidget/>
+    return <CalendarDayDataContext initialState={calendar.getFormattedDate()}>
+        <CalendarMonthDataContext initialState={calendar.getFormattedDate().monthId}>
+            <section className="calendar">
+                <section className="calendar__sidePanel">
+                    <TimeDate/>
+                    <CalendarWidget/>
+                </section>
+                <Outlet/>
             </section>
-            {viewState === "day" && <DayView />}
-            {viewState === "week" && <WeekView/>}
-            {viewState === "month" && <MonthView/>}
-            {viewState === "year" && <YearView/>}
-        </section>
-    );
+        </CalendarMonthDataContext>
+    </CalendarDayDataContext>
 }
 
 export default CalendarPage;

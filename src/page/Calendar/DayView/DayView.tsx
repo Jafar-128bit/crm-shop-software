@@ -1,17 +1,13 @@
 import './dayView.css';
-import {JSX, useEffect, useLayoutEffect, useRef, useState} from "react";
+import {JSX, useContext, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {motion} from "framer-motion";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import {useSelector} from "react-redux";
-import {DayData, DayDataWithoutWeek} from "../../../type/type";
+import {DayData, DayDataWithoutWeek, MonthData, WeekData} from "../../../type/type";
 import useGetTimeInNumber from "../../../hooks/useGetTimeInNumber";
-import {
-    areObjectValuesEqual,
-    convertHoursMinutesToMinutes,
-    generateCalendarDataLinear
-} from "../../../utils/utils";
+import {areObjectValuesEqual, convertHoursMinutesToMinutes} from "../../../utils/utils";
 import {Calendar} from "../../../class/class";
+import {DayDataContext, MonthDataContext} from "../CalendarPage";
 
 type PropTimeSlot = {
     hours: number;
@@ -21,25 +17,100 @@ type FlagType = "SET_THIS_DAY" | "SET_NEXT_DAY" | "SET_PREV_DAY";
 
 const DayView = (): JSX.Element => {
     const calendarData: Calendar = new Calendar();
-    const todayDate: DayDataWithoutWeek = calendarData.getFormattedDate();
+    const currentDate: DayDataWithoutWeek = calendarData.getFormattedDate();
 
-    const day = generateCalendarDataLinear(todayDate.yearValue, todayDate.monthId);
-    const defaultIndex: number = day.findIndex((element) => element.dayValue === todayDate.dayValue && element.dayName === todayDate.dayName);
-    const [calendarDayDataIndex, setCalendarDayDataIndex] = useState<number>(defaultIndex);
+    const dayDataContextState = useContext(DayDataContext);
+    const montDataContextState = useContext(MonthDataContext);
+
+    const getFlatMonthData = (yearValue: number, monthId: number): DayData[] => {
+        const monthArrayData: MonthData[] = calendarData.getCalendarData(yearValue).monthArray;
+        const monthIndex: number = monthArrayData.findIndex(month => month.monthId === monthId);
+        const flatMonthData: DayData[] = monthArrayData[monthIndex].weekArray.flatMap((week: WeekData) => week.dayArray);
+        return flatMonthData.filter((day: DayData) => day.monthId === monthId);
+    };
+
+    const currentDayIndex: number = getFlatMonthData(currentDate.yearValue, currentDate.monthId).findIndex(
+        (day: DayData) => day.dayValue === currentDate.dayValue && day.monthId === currentDate.monthId
+    );
+
+    const [dateState, setDateState] = useState<{
+        yearValue: number;
+        monthId: number;
+        dayIndex: number;
+    }>({
+        yearValue: currentDate.yearValue,
+        monthId: currentDate.monthId,
+        dayIndex: currentDayIndex,
+    });
+    const [selectDayData, setSelectDayData] = useState<DayDataWithoutWeek>(currentDate);
+
+    const handleChangeDay = (flag: FlagType) => {
+        setDateState((prevDateState) => {
+            const currentMonthData = getFlatMonthData(prevDateState.yearValue, prevDateState.monthId);
+            let newYearValue = prevDateState.yearValue;
+            let newMonthId = prevDateState.monthId;
+            let newDayIndex = prevDateState.dayIndex;
+
+            switch (flag) {
+                case "SET_NEXT_DAY":
+                    newDayIndex += 1;
+                    if (newDayIndex >= currentMonthData.length) {
+                        newDayIndex = 0;
+                        newMonthId += 1;
+                        if (newMonthId > 11) {
+                            newMonthId = 0;
+                            newYearValue += 1;
+                        }
+                    }
+                    break;
+                case "SET_PREV_DAY":
+                    newDayIndex -= 1;
+                    if (newDayIndex < 0) {
+                        newMonthId -= 1;
+                        if (newMonthId < 0) {
+                            newMonthId = 11;
+                            newYearValue -= 1;
+                        }
+                        newDayIndex = getFlatMonthData(newYearValue, newMonthId).length - 1;
+                    }
+                    break;
+                case "SET_THIS_DAY":
+                    newYearValue = dayDataContextState.state.yearValue;
+                    newMonthId = dayDataContextState.state.monthId;
+                    newDayIndex = getFlatMonthData(newYearValue, newMonthId).findIndex(
+                        (day: DayData) => day.dayValue === dayDataContextState.state.dayValue && day.monthId === dayDataContextState.state.monthId
+                    );
+                    break;
+                default:
+                    break;
+            }
+
+            return {
+                ...prevDateState,
+                yearValue: newYearValue,
+                monthId: newMonthId,
+                dayIndex: newDayIndex,
+            };
+        });
+    };
+
+    useEffect(() => {
+        setSelectDayData(getFlatMonthData(dateState.yearValue, dateState.monthId)[dateState.dayIndex]);
+        montDataContextState.setState(dateState.monthId);
+    }, [dateState]);
+    useEffect(() => {
+        handleChangeDay("SET_THIS_DAY");
+    }, [dayDataContextState.state]);
+
+    const handleSetCurrentDay = () => {
+        setSelectDayData(currentDate);
+    };
 
     const targetRef = useRef<HTMLDivElement>(null);
     const getTimeIn24HoursFormat: string = useGetTimeInNumber();
     const totalMinutes: number = convertHoursMinutesToMinutes(getTimeIn24HoursFormat);
 
-    const dayData = {
-        yearValue: todayDate.yearValue,
-        monthId: todayDate.monthId,
-        monthName: todayDate.monthName,
-        dayName: day[calendarDayDataIndex].dayName,
-        dayValue: day[calendarDayDataIndex].dayValue,
-    }
-
-    const [isDateEqual, setIsDateEqual] = useState<boolean>(areObjectValuesEqual(todayDate, dayData));
+    const [isDateEqual, setIsDateEqual] = useState<boolean>(areObjectValuesEqual(currentDate, selectDayData));
     const [minuteToPixel, setMinuteToPixel] = useState<number>(0);
 
     const timeArray: number[] = Array.from({length: 24}, (_, index) => index + 1);
@@ -50,42 +121,14 @@ const DayView = (): JSX.Element => {
         const percentage: number = ((totalMinutes - minTime) / (maxTime - minTime)) * 100;
         setMinuteToPixel(((59 * 24) + 24) * (percentage / 100));
 
-        setIsDateEqual(areObjectValuesEqual(todayDate, dayData));
+        setIsDateEqual(areObjectValuesEqual(currentDate, selectDayData));
 
-    }, [dayData, totalMinutes]);
-
+    }, [selectDayData, totalMinutes]);
     useLayoutEffect(() => {
         setTimeout(() => {
             if (targetRef.current) targetRef.current.scrollIntoView({behavior: 'smooth'});
         }, 250);
     }, []);
-
-    const handleSetDay = (flag: FlagType, dayIndex?: number): void => {
-        const setIndex = (direction: "next" | "prev"): void => {
-            const newIndex = direction === "next"
-                ? (calendarDayDataIndex + 1) % day.length
-                : (calendarDayDataIndex - 1 + day.length) % day.length;
-            setCalendarDayDataIndex(newIndex);
-        };
-        const getData = (index: number = defaultIndex) => day[index];
-        switch (flag) {
-            case "SET_THIS_DAY":
-
-                break;
-            case "SET_PREV_DAY":
-                setIndex("prev");
-                break;
-            case "SET_NEXT_DAY":
-                setIndex("next");
-                break;
-            default:
-                break;
-        }
-    };
-
-    const handleSetCurrentDay = () => {
-        setCalendarDayDataIndex(defaultIndex);
-    }
 
     const TimeSlot = (prop: PropTimeSlot): JSX.Element => {
         let period: string | null = prop.hours < 12 ? "am" : "pm"
@@ -111,14 +154,14 @@ const DayView = (): JSX.Element => {
                 <div className="calendar__dateContainer">
                     <button
                         type="button"
-                        onClick={() => handleSetDay("SET_PREV_DAY")}
+                        onClick={() => handleChangeDay("SET_PREV_DAY")}
                     >
                         <ArrowLeftIcon/>
                     </button>
-                    <p>{`${day[calendarDayDataIndex].dayValue} ${todayDate.monthName}, ${todayDate.yearValue}`}</p>
+                    <p>{`${selectDayData?.dayValue} ${selectDayData?.monthName}, ${selectDayData?.yearValue}`}</p>
                     <button
                         type="button"
-                        onClick={() => handleSetDay("SET_NEXT_DAY")}
+                        onClick={() => handleChangeDay("SET_NEXT_DAY")}
                     >
                         <ArrowRightIcon/>
                     </button>
@@ -143,9 +186,12 @@ const DayView = (): JSX.Element => {
                 {timeArray.map((value, index) => {
                     return <TimeSlot key={index} hours={value}/>
                 })}
-                {isDateEqual && <div className="calendar__dayView__timeMinuteHand" style={{top: `${minuteToPixel}px`}}/>}
-                {isDateEqual && <div className="calendar__dayView__timeMinuteDot leftDot" style={{top: `${minuteToPixel - 7}px`}}/>}
-                {isDateEqual && <div className="calendar__dayView__timeMinuteDot rightDot" style={{top: `${minuteToPixel - 7}px`}}/>}
+                {isDateEqual &&
+                    <div className="calendar__dayView__timeMinuteHand" style={{top: `${minuteToPixel}px`}}/>}
+                {isDateEqual &&
+                    <div className="calendar__dayView__timeMinuteDot leftDot" style={{top: `${minuteToPixel - 7}px`}}/>}
+                {isDateEqual && <div className="calendar__dayView__timeMinuteDot rightDot"
+                                     style={{top: `${minuteToPixel - 7}px`}}/>}
             </motion.div>
         </section>
     );

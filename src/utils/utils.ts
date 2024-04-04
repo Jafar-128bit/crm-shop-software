@@ -20,28 +20,6 @@ export const handleSelectDayName = (dayIndex: number): string => {
         default:
             return "";
     }
-}
-
-export const generateCalendarDataLinear = (year: number, month: number) => {
-    const dayIndex: number[] = [6, 0, 1, 2, 3, 4, 5];
-    const data = [];
-
-    for (const day of dayIndex) {
-        const daysInMonth: number = new Date(year, month, 0).getDate();
-        for (let i: number = 1; i <= daysInMonth; i++) {
-            const currentDate: Date = new Date(year, month, i);
-            if (currentDate.getDay() === dayIndex.indexOf(day)) {
-                const dayData = {
-                    dayValue: i,
-                    dayName: dayIndex[currentDate.getDay()],
-                };
-                data.push(dayData);
-                data.sort((a, b) => a.dayValue - b.dayValue);
-            }
-        }
-    }
-
-    return data;
 };
 
 export const heapSortTaskDataList = (array: Array<TaskData>, sortOption: "sortByPriority" | "sortByDate"): Array<TaskData> => {
@@ -130,7 +108,7 @@ export const deepClone = <T>(input: T): T => {
 export const areObjectValuesEqual = (obj1: Record<string, any>, obj2: Record<string, any>): boolean => {
     const keys: string[] = Object.keys(obj1);
     return keys.every(key => obj1[key] === obj2[key]);
-}
+};
 
 export const getTimeInAMPMFormat = (): string => {
     const currentDate: Date = new Date();

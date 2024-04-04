@@ -1,0 +1,119 @@
+.sortByMenu__container {
+    width: max-content;
+    height: max-content;
+
+    position: relative;
+}
+
+.sortByMenu__btn {
+    background: var(--colorWhite);
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    width: max-content;
+    height: 32px;
+
+    padding: 0 10px;
+
+    border: none;
+    outline: none;
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.sortByMenu {
+    background: var(--colorWhiteTransparent35);
+    backdrop-filter: blur(12px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc(200px - 20px);
+    height: max-content;
+
+    padding: 10px;
+
+    border: 1px solid var(--colorWhiteTransparent75);
+    border-radius: var(--borderRadius02);
+    box-shadow: var(--shadow_07);
+
+    position: absolute;
+    top: 40px;
+    right: 0;
+
+    z-index: 81;
+}
+
+.sortByMenu__sortOptions,
+.sortByMenu__orderOptions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+
+    width: 100%;
+    height: max-content;
+}
+
+.sortByMenu__sortOptions__iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    margin: 0 10px 0 0;
+
+    border-radius: 50%;
+}
+
+.sortByMenu__sortOptionBtn,
+.sortByMenu__orderOptionBtn {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    width: calc(100% - 5px);
+    height: 32px;
+
+    padding: 0 0 0 5px;
+    margin: 0;
+
+    border: none;
+    outline: none;
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 400;
+
+    cursor: pointer;
+}
+
+.sortByMenu__sortOptionBtn:hover,
+.sortByMenu__orderOptionBtn:hover {
+    background: var(--color01);
+    color: var(--colorWhite);
+}
+
+.sortByMenu__separate {
+    width: 90%;
+    height: max-content;
+
+    margin: 5px 0;
+
+    border-bottom: 1px solid var(--colorBlackTransparent35);
+}

@@ -21,7 +21,7 @@
     overflow: hidden;
     overflow-y: auto;
 }
-{/* **************************************** */}
+
 .sidebar__userContainer {
     background: var(--colorWhite);
 
@@ -99,6 +99,35 @@
     font-weight: 400;
 }
 
+.sidebar__toggleBtn {
+    background: transparent;
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 5px;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    border-radius: var(--borderRadius02);
+
+    cursor: pointer;
+
+    position: absolute;
+    right: 10px;
+}
+
+.sidebar__toggleBtn:hover {
+    background: var(--newColor02);
+}
+
 .sidebar__shopListContainer {
     display: flex;
     align-items: center;
@@ -155,7 +184,7 @@
 }
 
 .sidebar__shopListBtn {
-    background: var(--backgroundGradient03);
+    background: var(--colorWhite);
 
     display: flex;
     align-items: center;
@@ -178,12 +207,12 @@
 .sidebar__optionsList {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     flex-direction: column;
     flex-shrink: 0;
 
     width: calc(95% - 40px);
-    height: 490px;
+    height: max-content;
 
     padding: 0 0;
     margin: 0;
@@ -220,7 +249,7 @@
     height: 35px;
 
     padding: 0 0 0 10px;
-    margin: 0;
+    margin: 10px 0 0 0;
 
     border-radius: var(--borderRadius02);
 
@@ -276,6 +305,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
 
     width: calc(50% - 5px);
     height: 45px;

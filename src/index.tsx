@@ -12,13 +12,18 @@ import Login from "./page/Login/Login";
 import Dashboard from "./page/Dashboard/Dashboard";
 import Inventory from "./page/Inventory/Inventory";
 import Billing from "./page/Billing/Billing";
-import Analytics from "./page/Analytics/Analytics";
 import Employee from "./page/Employee/Employee";
-import Shipping from "./page/Shipping/Shipping";
 import HelpSupport from "./page/HelpSupport/HelpSupport";
 import Setting from "./page/Setting/Setting";
 import Calendar from "./page/Calendar/CalendarPage";
 import Accounting from "./page/Accounting/Accounting";
+import DayView from "./page/Calendar/DayView/DayView";
+import WeekView from "./page/Calendar/WeekView/WeekView";
+import MonthView from "./page/Calendar/MonthView/MonthView";
+import YearView from "./page/Calendar/YearView/YearView";
+import InventoryList from "./page/Inventory/InventoryList/InventoryList";
+import InventoryDashboard from "./page/Inventory/InventoryDashboard/InventoryDashboard";
+import InventoryOpen from "./page/Inventory/InventoryOpen/InventoryOpen";
 
 const router = createBrowserRouter([
     {
@@ -36,10 +41,73 @@ const router = createBrowserRouter([
             {
                 path: "/inventory",
                 element: <Inventory/>,
-            },
-            {
-                path: "/analytics",
-                element: <Analytics/>,
+                children: [
+                    {
+                        path: "",
+                        element: <InventoryDashboard/>
+                    },
+                    {
+                        path: "inventory-list",
+                        children: [
+                            {
+                                path: "",
+                                element: <InventoryList/>,
+                            },
+                            {
+                                path: ":id",
+                                element: <InventoryOpen/>,
+                            },
+                        ]
+                    },
+                    {
+                        path: "batches",
+                        element: <div className="inventory__view__inventoryList">
+                            Batch List
+                        </div>
+                    },
+                    {
+                        path: "products",
+                        element: <div className="inventory__view__inventoryList">
+                            Product List
+                        </div>
+                    },
+                    {
+                        path: "add-products",
+                        element: <div className="inventory__view__inventoryList">
+                            Add Product List
+                        </div>
+                    },
+                    {
+                        path: "suppliers",
+                        element: <div className="inventory__view__inventoryList">
+                            Suppliers List
+                        </div>
+                    },
+                    {
+                        path: "purchase-order",
+                        element: <div className="inventory__view__inventoryList">
+                            Purchase List
+                        </div>
+                    },
+                    {
+                        path: "return-purchase-order",
+                        element: <div className="inventory__view__inventoryList">
+                            Return Purchase List
+                        </div>
+                    },
+                    {
+                        path: "create-purchase-order",
+                        element: <div className="inventory__view__inventoryList">
+                            Create Purchase List
+                        </div>
+                    },
+                    {
+                        path: "create-return-purchase-order",
+                        element: <div className="inventory__view__inventoryList">
+                            Create Return Purchase List
+                        </div>
+                    },
+                ]
             },
             {
                 path: "/employee",
@@ -52,10 +120,24 @@ const router = createBrowserRouter([
             {
                 path: "/calendar",
                 element: <Calendar/>,
-            },
-            {
-                path: "/shipping",
-                element: <Shipping/>,
+                children: [
+                    {
+                        path: "",
+                        element: <DayView/>
+                    },
+                    {
+                        path: "week",
+                        element: <WeekView/>
+                    },
+                    {
+                        path: "month",
+                        element: <MonthView/>
+                    },
+                    {
+                        path: "year",
+                        element: <YearView/>
+                    },
+                ]
             },
             {
                 path: "/help&support",

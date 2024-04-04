@@ -8,32 +8,149 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {motion} from 'framer-motion';
-import {
-    executeBillingAction,
-    executeInventoryAction,
-    executeEmployeeAction,
-    executeAccountingAction,
-    executeCalendarAction
-} from "../../store/slices/actionTabFunctionSlices";
+import {toggleMenuState} from "../../store/slices/menuSlices";
+import {useNavigate, useLocation} from "react-router-dom";
+
+type InventoryViewType = "viewInventoryList"
+    | "viewBatchList"
+    | "viewProductList"
+    | "viewSupplierList"
+    | "viewPurchaseOrder"
+    | "viewReturnPurchaseOrder"
+    | "addProduct"
+    | "createPurchaseOrder"
+    | "createReturnPurchaseOrder";
+
+type InventoryMenuType = "createInventory"
+    | "createBatch"
+    | "createProductCategory"
+    | "viewProductCategories"
+    | "createSupplier";
+
+type CalendarMenuType = "addTask" | "addReminder" | "addEvent" | "viewTask" | "viewReminder" | "viewEvent";
+type CalendarViewType = "dayView" | "weekView" | "monthView" | "yearView";
 
 const ActionTab = () => {
     const actionTabState = useSelector((state: any) => state.actionTabSlice);
-    const dispatch = useDispatch();
+    const location = useLocation().pathname.split('/')[1];
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    /* Billing Tab Function List */
+    const billingFunctionData = {
+        menuAction: (): void => {},
+        viewAction: (): void => {}
+    };
+    /* Inventory Tab Function List */
+    const inventoryFunctionData = {
+        menuAction: (menu: InventoryMenuType): void => {
+            switch (menu) {
+                case "createInventory":
+                    dispatch(toggleMenuState({actionState: true, optionName: "CREATE_INVENTORY"}));
+                    break;
+                case "createBatch":
+                    dispatch(toggleMenuState({actionState: true, optionName: "CREATE_BATCH"}));
+                    break;
+                case "createProductCategory":
+                    dispatch(toggleMenuState({actionState: true, optionName: "CREATE_PRODUCT_CATEGORY"}));
+                    break;
+                case "viewProductCategories":
+                    dispatch(toggleMenuState({actionState: true, optionName: "VIEW_PRODUCT_CATEGORIES"}));
+                    break;
+                case "createSupplier":
+                    dispatch(toggleMenuState({actionState: true, optionName: "CREATE_SUPPLIER"}));
+                    break;
+                default:
+                    break;
+            }
+        },
+        viewAction: (view: InventoryViewType): void => {
+            switch (view) {
+                case "viewInventoryList":
+                    navigate("/inventory/inventory-list");
+                    break;
+                case "viewBatchList":
+                    navigate("/inventory/batches");
+                    break;
+                case "viewProductList":
+                    navigate("/inventory/products");
+                    break;
+                case "viewSupplierList":
+                    navigate("/inventory/suppliers");
+                    break;
+                case "viewPurchaseOrder":
+                    navigate("/inventory/purchase-order");
+                    break;
+                case "viewReturnPurchaseOrder":
+                    navigate("/inventory/return-purchase-order");
+                    break;
+                case "addProduct":
+                    navigate("/inventory/add-products");
+                    break;
+                case "createPurchaseOrder":
+                    navigate("/inventory/create-purchase-order");
+                    break;
+                case "createReturnPurchaseOrder":
+                    navigate("/inventory/create-return-purchase-order");
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+    /* Employee Tab Function List */
+    const employeeFunctionData = {
+
+    };
+    /* Accounting Tab Function List */
+    const accountingFunctionData = {
+
+    };
     /* Action Tab Function List */
     const calendarFunctionData = {
-        viewTabFunction: (actionFlag: "day" | "week" | "month" | "year"): void | null => {
-            dispatch(executeCalendarAction({actionName: "viewAction", actionOption: actionFlag,}));
-        },
-        taskTabFunction: (actionFlag: "add" | "edit" | "remove" | "viewTask" | null): void => {
-            dispatch(executeCalendarAction({actionName: "taskAction", actionOption: actionFlag,}));
-        },
-        reminderTabFunction: (actionFlag: "add" | "delete" | null): void => {
-            dispatch(executeCalendarAction({actionName: "reminderAction", actionOption: actionFlag,}));
-        },
-        eventTabFunction: (actionFlag: "add" | "edit" | "delete" | "view" | null): void => {
-            dispatch(executeCalendarAction({actionName: "eventAction", actionOption: actionFlag,}));
-        }
+       menuAction: (menu: CalendarMenuType): void => {
+           switch (menu) {
+               case "addTask":
+                   dispatch(toggleMenuState({actionState: true, optionName:"CREATE_TASK"}))
+                   break;
+               case "addReminder":
+                   dispatch(toggleMenuState({actionState: true, optionName:"CREATE_REMINDER"}))
+                   break;
+               case "addEvent":
+                   dispatch(toggleMenuState({actionState: true, optionName:"CREATE_EVENT"}))
+                   break;
+               case "viewTask":
+                   dispatch(toggleMenuState({actionState: true, optionName:"VIEW_TASK"}))
+                   break;
+               case "viewReminder":
+                   dispatch(toggleMenuState({actionState: true, optionName:"VIEW_REMINDER"}))
+                   break;
+               case "viewEvent":
+                   dispatch(toggleMenuState({actionState: true, optionName:"VIEW_EVENT"}))
+                   break;
+               default:
+                   break;
+           }
+       },
+       viewAction: (view: CalendarViewType): void => {
+           switch (view) {
+               case "dayView":
+                   navigate("/calendar");
+                   break;
+               case "weekView":
+                   navigate("/calendar/week");
+                   break;
+               case "monthView":
+                   navigate("/calendar/month");
+                   break;
+               case "yearView":
+                   navigate("/calendar/year");
+                   break;
+               default:
+                   break;
+           }
+       }
     };
 
     /* Action Tab Data */
@@ -45,22 +162,19 @@ const ActionTab = () => {
 
         {parentId: 1, nodeId: 4, optionData: "Create Order", action: null},
         {parentId: 1, nodeId: 5, optionData: "View Orders", action: null},
-        {parentId: 1, nodeId: 6, optionData: "Edit Order", action: null},
-        {parentId: 1, nodeId: 7, optionData: "Cancel Order", action: null},
-        {parentId: 1, nodeId: 8, optionData: "Mark Order Fulfilled", action: null},
+        {parentId: 1, nodeId: 6, optionData: "Mark Order Fulfilled", action: null},
 
-        {parentId: 2, nodeId: 9, optionData: "Generate Invoice", action: null},
+        {parentId: 2, nodeId: 7, optionData: "Generate Invoice", action: null},
 
-        {parentId: 3, nodeId: 10, optionData: "Track Order", action: null},
-        {parentId: 3, nodeId: 11, optionData: "Print Packing Slip", action: null},
-        {parentId: 3, nodeId: 12, optionData: "Print Shipping label", action: null},
-        {parentId: 3, nodeId: 13, optionData: "Return Management", action: null},
-        {parentId: 3, nodeId: 14, optionData: "Order History", action: null},
-        {parentId: 3, nodeId: 15, optionData: "Export Order", action: null},
+        {parentId: 3, nodeId: 8, optionData: "Track Order", action: null},
+        {parentId: 3, nodeId: 9, optionData: "Print Packing Slip", action: null},
+        {parentId: 3, nodeId: 10, optionData: "Print Shipping label", action: null},
+        {parentId: 3, nodeId: 11, optionData: "Return Management", action: null},
+        {parentId: 3, nodeId: 12, optionData: "Order History", action: null},
+        {parentId: 3, nodeId: 13, optionData: "Export Order", action: null},
 
-        {parentId: 13, nodeId: 16, optionData: "Create Return Order", action: null},
-        {parentId: 13, nodeId: 17, optionData: "View Return Orders", action: null},
-        {parentId: 13, nodeId: 18, optionData: "Edit Return Order", action: null},
+        {parentId: 11, nodeId: 14, optionData: "Create Return Order", action: null},
+        {parentId: 11, nodeId: 15, optionData: "View Return Orders", action: null},
     ];
     const inventoryActionTab: NodeDataType[] = [
         {parentId: null, nodeId: 0, optionData: "Inventory", action: null},
@@ -70,38 +184,28 @@ const ActionTab = () => {
         {parentId: 0, nodeId: 4, optionData: "Supplier", action: null},
         {parentId: 0, nodeId: 5, optionData: "Purchase Order", action: null},
 
-        {parentId: 1, nodeId: 6, optionData: "Create New Inventory", action: null},
-        {parentId: 1, nodeId: 7, optionData: "Edit Inventory", action: null},
-        {parentId: 1, nodeId: 8, optionData: "Close Inventory", action: null},
+        {parentId: 1, nodeId: 6, optionData: "Create New Inventory", action: () => inventoryFunctionData.menuAction("createInventory")},
+        {parentId: 1, nodeId: 7, optionData: "View All Inventory", action: () => inventoryFunctionData.viewAction("viewInventoryList")},
 
-        {parentId: 2, nodeId: 9, optionData: "Add Batch", action: null},
-        {parentId: 2, nodeId: 10, optionData: "Edit Batch", action: null},
-        {parentId: 2, nodeId: 11, optionData: "Delete Batch", action: null},
-        {parentId: 2, nodeId: 12, optionData: "View all Batch", action: null},
+        {parentId: 2, nodeId: 8, optionData: "Add Batch", action: () => inventoryFunctionData.menuAction("createBatch")},
+        {parentId: 2, nodeId: 9, optionData: "View all Batch", action: () => inventoryFunctionData.viewAction("viewBatchList")},
 
-        {parentId: 3, nodeId: 13, optionData: "Add New Product", action: null},
-        {parentId: 3, nodeId: 14, optionData: "Edit Product", action: null},
-        {parentId: 3, nodeId: 15, optionData: "Deactivate Product", action: null},
-        {parentId: 3, nodeId: 16, optionData: "Product Categories", action: null},
-        {parentId: 3, nodeId: 17, optionData: "View All Product", action: null},
+        {parentId: 3, nodeId: 10, optionData: "Add New Product", action: () => inventoryFunctionData.viewAction("addProduct")},
+        {parentId: 3, nodeId: 11, optionData: "Product Categories", action: null},
+        {parentId: 3, nodeId: 12, optionData: "View All Product", action: () => inventoryFunctionData.viewAction("viewProductList")},
 
-        {parentId: 16, nodeId: 18, optionData: "Create New Category", action: null},
-        {parentId: 16, nodeId: 19, optionData: "Edit Category", action: null},
-        {parentId: 16, nodeId: 19, optionData: "Delete Category", action: null},
-        {parentId: 16, nodeId: 19, optionData: "View Category List", action: null},
+        {parentId: 11, nodeId: 13, optionData: "Create New Category", action: () => inventoryFunctionData.menuAction("createProductCategory")},
+        {parentId: 11, nodeId: 14, optionData: "View Category List", action: () => inventoryFunctionData.menuAction("viewProductCategories")},
 
-        {parentId: 4, nodeId: 20, optionData: "Add New Supplier", action: null},
-        {parentId: 4, nodeId: 21, optionData: "Edit Supplier", action: null},
-        {parentId: 4, nodeId: 22, optionData: "Deactivate Supplier", action: null},
+        {parentId: 4, nodeId: 15, optionData: "Add New Supplier", action: () => inventoryFunctionData.menuAction("createSupplier")},
+        {parentId: 4, nodeId: 16, optionData: "View all Supplier", action: () => inventoryFunctionData.viewAction("viewSupplierList")},
 
-        {parentId: 5, nodeId: 23, optionData: "Create Purchase Order", action: null},
-        {parentId: 5, nodeId: 24, optionData: "Edit Purchase Order", action: null},
-        {parentId: 5, nodeId: 25, optionData: "View Purchase Order", action: null},
-        {parentId: 5, nodeId: 26, optionData: "Return Management", action: null},
+        {parentId: 5, nodeId: 17, optionData: "Create Purchase Order", action: () => inventoryFunctionData.viewAction("createPurchaseOrder")},
+        {parentId: 5, nodeId: 18, optionData: "View Purchase Order", action: () => inventoryFunctionData.viewAction("viewPurchaseOrder")},
+        {parentId: 5, nodeId: 19, optionData: "Return Management", action: null},
 
-        {parentId: 26, nodeId: 27, optionData: "Create Return Order", action: null},
-        {parentId: 26, nodeId: 27, optionData: "Edit Return Order", action: null},
-        {parentId: 26, nodeId: 28, optionData: "Delete Return Order", action: null},
+        {parentId: 19, nodeId: 20, optionData: "Create Return Order", action: () => inventoryFunctionData.viewAction("createReturnPurchaseOrder")},
+        {parentId: 19, nodeId: 21, optionData: "View All Return Order", action: () => inventoryFunctionData.viewAction("viewReturnPurchaseOrder")},
     ];
     const employeeActionTab: NodeDataType[] = [
         {parentId: null, nodeId: 0, optionData: "Employee", action: null},
@@ -111,46 +215,18 @@ const ActionTab = () => {
         {parentId: 0, nodeId: 4, optionData: "Payroll & Salary", action: null},
 
         {parentId: 1, nodeId: 5, optionData: "Add New Employee", action: null},
-        {parentId: 1, nodeId: 5, optionData: "Edit Employee Data", action: null},
-        {parentId: 1, nodeId: 5, optionData: "Deactivate Employee", action: null},
-        {parentId: 1, nodeId: 5, optionData: "Manage User Permission", action: null},
+        {parentId: 1, nodeId: 6, optionData: "Manage User Permission", action: null},
 
-        {parentId: 2, nodeId: 6, optionData: "Take Attendance", action: null},
-        {parentId: 2, nodeId: 7, optionData: "Attendance Report", action: null},
+        {parentId: 2, nodeId: 7, optionData: "Take Attendance", action: null},
+        {parentId: 2, nodeId: 8, optionData: "View Attendance Report", action: null},
 
-        {parentId: 3, nodeId: 8, optionData: "Submit Leave Request", action: null},
-        {parentId: 3, nodeId: 8, optionData: "Leave Application History", action: null},
-        {parentId: 3, nodeId: 9, optionData: "View Leave Report", action: null},
+        {parentId: 3, nodeId: 9, optionData: "Submit Leave Request", action: null},
+        {parentId: 3, nodeId: 10, optionData: "Leave Application History", action: null},
+        {parentId: 3, nodeId: 11, optionData: "View Leave Report", action: null},
 
-        {parentId: 4, nodeId: 9, optionData: "Assign New Salary", action: null},
-        {parentId: 4, nodeId: 10, optionData: "Edit Salary Data", action: null},
-        {parentId: 4, nodeId: 11, optionData: "Generate Payslip", action: null},
-        {parentId: 4, nodeId: 12, optionData: "View Salary Data", action: null},
-    ];
-    const calendarActionTab: NodeDataType[] = [
-        {parentId: null, nodeId: 0, optionData: "Calendar", action: null},
-        {parentId: 0, nodeId: 1, optionData: "Calendar View", action: null},
-        {parentId: 0, nodeId: 2, optionData: "Task", action: null},
-        {parentId: 0, nodeId: 3, optionData: "Reminder", action: null},
-        {parentId: 0, nodeId: 4, optionData: "Event", action: null},
-
-        {parentId: 1, nodeId: 6, optionData: "Day View", action: () => calendarFunctionData.viewTabFunction("day")},
-        {parentId: 1, nodeId: 7, optionData: "Week View", action: () => calendarFunctionData.viewTabFunction("week")},
-        {parentId: 1, nodeId: 8, optionData: "Month View", action: () => calendarFunctionData.viewTabFunction("month")},
-        {parentId: 1, nodeId: 9, optionData: "Year View", action: () => calendarFunctionData.viewTabFunction("year")},
-
-        {parentId: 2, nodeId: 10, optionData: "Add New Task", action: () => calendarFunctionData.taskTabFunction("add")},
-        {parentId: 2, nodeId: 11, optionData: "Edit Task", action: () => calendarFunctionData.taskTabFunction("edit")},
-        {parentId: 2, nodeId: 12, optionData: "Remove Task", action: () => calendarFunctionData.taskTabFunction("remove")},
-        {parentId: 2, nodeId: 13, optionData: "View Task List", action: () => calendarFunctionData.taskTabFunction("viewTask")},
-
-        {parentId: 3, nodeId: 14, optionData: "Add Reminder", action: () => calendarFunctionData.reminderTabFunction("add")},
-        {parentId: 3, nodeId: 15, optionData: "Delete Reminder", action: () => calendarFunctionData.reminderTabFunction("delete")},
-
-        {parentId: 4, nodeId: 16, optionData: "Add New Event", action: () => calendarFunctionData.eventTabFunction("add")},
-        {parentId: 4, nodeId: 17, optionData: "Edit Event", action: () => calendarFunctionData.eventTabFunction("edit")},
-        {parentId: 4, nodeId: 18, optionData: "Delete Event", action: () => calendarFunctionData.eventTabFunction("delete")},
-        {parentId: 4, nodeId: 19, optionData: "View All Events", action: () => calendarFunctionData.eventTabFunction("view")},
+        {parentId: 4, nodeId: 12, optionData: "Assign New Salary", action: null},
+        {parentId: 4, nodeId: 13, optionData: "View Salary Data", action: null},
+        {parentId: 4, nodeId: 14, optionData: "Generate Payslip", action: null},
     ];
     const accountingActionTab: NodeDataType[] = [
         {parentId: null, nodeId: 0, optionData: "Accounting", action: null},
@@ -176,21 +252,36 @@ const ActionTab = () => {
         {parentId: 2, nodeId: 17, optionData: "Send Payment Reminders", action: null},
 
         {parentId: 15, nodeId: 18, optionData: "Create New Customer", action: null},
-        {parentId: 15, nodeId: 19, optionData: "Edit Customer", action: null},
-        {parentId: 15, nodeId: 20, optionData: "Deactivate Customer", action: null},
-        {parentId: 15, nodeId: 21, optionData: "View all Customers", action: null},
+        {parentId: 15, nodeId: 19, optionData: "View all Customers", action: null},
 
-        {parentId: 3, nodeId: 22, optionData: "View Outstanding Bills", action: null},
-        {parentId: 3, nodeId: 23, optionData: "Schedule Payments", action: null},
-        {parentId: 3, nodeId: 24, optionData: "Supplier Management", action: null},
+        {parentId: 3, nodeId: 20, optionData: "View Outstanding Bills", action: null},
+        {parentId: 3, nodeId: 21, optionData: "Schedule Payments", action: null},
+        {parentId: 3, nodeId: 22, optionData: "View All Suppliers", action: null},
 
-        {parentId: 24, nodeId: 25, optionData: "Add New Supplier", action: null},
-        {parentId: 24, nodeId: 26, optionData: "Edit Supplier", action: null},
-        {parentId: 24, nodeId: 27, optionData: "Deactivate Supplier", action: null},
+        {parentId: 4, nodeId: 23, optionData: "Balance Sheet", action: null},
+        {parentId: 4, nodeId: 24, optionData: "Income Statement", action: null},
+        {parentId: 4, nodeId: 25, optionData: "Cash Flow Statement", action: null},
+    ];
+    const calendarActionTab: NodeDataType[] = [
+        {parentId: null, nodeId: 0, optionData: "Calendar", action: null},
+        {parentId: 0, nodeId: 1, optionData: "Calendar View", action: null},
+        {parentId: 0, nodeId: 2, optionData: "Task", action: null},
+        {parentId: 0, nodeId: 3, optionData: "Reminder", action: null},
+        {parentId: 0, nodeId: 4, optionData: "Event", action: null},
 
-        {parentId: 4, nodeId: 28, optionData: "Balance Sheet", action: null},
-        {parentId: 4, nodeId: 29, optionData: "Income Statement", action: null},
-        {parentId: 4, nodeId: 30, optionData: "Cash Flow Statement", action: null},
+        {parentId: 1, nodeId: 6, optionData: "Day View", action: () => calendarFunctionData.viewAction("dayView")},
+        {parentId: 1, nodeId: 7, optionData: "Week View", action: () => calendarFunctionData.viewAction("weekView")},
+        {parentId: 1, nodeId: 8, optionData: "Month View", action: () => calendarFunctionData.viewAction("monthView")},
+        {parentId: 1, nodeId: 9, optionData: "Year View", action: () => calendarFunctionData.viewAction("yearView")},
+
+        {parentId: 2, nodeId: 10, optionData: "Add New Task", action: () => calendarFunctionData.menuAction("addTask")},
+        {parentId: 2, nodeId: 11, optionData: "View All Task", action: () => calendarFunctionData.menuAction("viewTask")},
+
+        {parentId: 3, nodeId: 12, optionData: "Add Reminder", action: () => calendarFunctionData.menuAction("addReminder")},
+        {parentId: 3, nodeId: 13, optionData: "View All Reminders", action: () => calendarFunctionData.menuAction("viewReminder")},
+
+        {parentId: 4, nodeId: 14, optionData: "Add New Event", action: () => calendarFunctionData.menuAction("addEvent")},
+        {parentId: 4, nodeId: 15, optionData: "View All Events", action: () => calendarFunctionData.menuAction("viewEvent")},
     ];
 
     const [optionTree, setOptionTree] = useState<TreeDataType | null>(null);
@@ -198,30 +289,29 @@ const ActionTab = () => {
     const [openSubSubOption, setOpenSubSubOption] = useState<number | null>(null);
 
     const handleGetOptionTree = () => {
-        if (actionTabState.billingActions) setOptionTree(createOptionTree(billingActionTab));
-        else if (actionTabState.inventoryActions) setOptionTree(createOptionTree(inventoryActionTab));
-        else if (actionTabState.employeeAction) setOptionTree(createOptionTree(employeeActionTab));
-        else if (actionTabState.calendarActions) setOptionTree(createOptionTree(calendarActionTab));
-        else if (actionTabState.accountingActions) setOptionTree(createOptionTree(accountingActionTab));
+        if (location === "billing") setOptionTree(createOptionTree(billingActionTab));
+        else if (location === "inventory") setOptionTree(createOptionTree(inventoryActionTab));
+        else if (location === "employee") setOptionTree(createOptionTree(employeeActionTab));
+        else if (location === "accounting") setOptionTree(createOptionTree(accountingActionTab));
+        else if (location === "calendar") setOptionTree(createOptionTree(calendarActionTab));
         else setOptionTree(null);
     };
 
     useEffect(() => {
         handleGetOptionTree();
-    }, [actionTabState]);
+    }, [location]);
 
     const handleOptionAction = (childrenLength: number, action: (() => void) | null): void => {
         if (childrenLength > 0) return;
         if (action) action();
     };
 
-    return <nav
-        className="actionTab"
-        onMouseLeave={() => {
-            setOpenSubOption(null);
-            setOpenSubSubOption(null);
-        }}
-    >
+    //TODO: Make it dynamic level instead of hard coded level
+
+    return <nav className="actionTab" onMouseLeave={() => {
+        setOpenSubOption(null);
+        setOpenSubSubOption(null);
+    }}>
         <h2 className="actionTab__actionTitle">{optionTree?.optionData}</h2>
         <ul className="actionTab__mainOptionList">
             {optionTree?.children.map((value, index) => {

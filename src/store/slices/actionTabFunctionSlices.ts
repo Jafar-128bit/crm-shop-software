@@ -8,11 +8,11 @@ interface BillingActionTabType {
 }
 interface InventoryActionTabType {
     inventoryAction: "create" | "edit" | "close" | null;
-    batchAction: "add" | "edit" | "delete" | "view" | null;
-    productAction: "add" | "edit" | "deactivate" | "view" | null;
-    productCategoriesAction: "create" | "edit" | "delete" | "view" | null;
+    batchAction: "add" | "edit" | "delete" | null;
+    productAction: "add" | "edit" | "deactivate" | null;
+    productCategoriesAction: "create" | "edit" | "delete" | null;
     supplierAction: "add" | "edit" | "deactivate" | null;
-    purchaseOrderAction: "create" | "edit" | "view" | null;
+    purchaseOrderAction: "create" | "edit" | null;
     returnAction: "create" | "edit" | "delete" | null;
 }
 interface EmployeeActionTabType {
@@ -49,8 +49,7 @@ const inventoryActions: InventoryActionTabType = {
     productCategoriesAction: null,
     supplierAction: null,
     purchaseOrderAction: null,
-    returnAction: null
-
+    returnAction: null,
 };
 const employeeActions: EmployeeActionTabType = {
     employeeAction: null,
@@ -86,7 +85,7 @@ type billingActionPayloadType = {
     actionOption: any | null;
 };
 type inventoryActionPayloadType = {
-    actionName: "inventoryAction" | "batchAction" | "productAction" | "productCategoriesAction" | "supplierAction" | "purchaseOrderAction" | "returnAction";
+    actionName: "inventoryAction" | "batchAction" | "productAction" | "productCategoriesAction" | "supplierAction" | "purchaseOrderAction" | "returnAction" ;
     actionOption: any | null;
 };
 type employeeActionPayloadType = {
@@ -101,6 +100,8 @@ type calendarActionPayloadType = {
     actionName: "viewAction" | "taskAction" | "reminderAction" | "eventAction";
     actionOption: any | null;
 }
+
+//TODO: Add State conflict manager.
 
 const actionTabFunctionSlices = createSlice({
     name: 'actionTabFunctionSlices',

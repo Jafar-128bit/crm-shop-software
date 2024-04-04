@@ -1,17 +1,24 @@
 import './monthView.css';
 import {Calendar} from "../../../class/class";
 import {DayData, DayDataWithoutWeek, Month, WeekData} from "../../../type/type";
-import {JSX, useState} from "react";
+import {JSX, MutableRefObject, useContext, useEffect, useRef, useState} from "react";
 import {motion} from 'framer-motion';
-import {handleSelectDayName} from "../../../utils/utils";
+import {areObjectValuesEqual, handleSelectDayName} from "../../../utils/utils";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import {DayDataContext, MonthDataContext} from "../CalendarPage";
+import {useDispatch} from "react-redux";
+import {executeCalendarAction} from "../../../store/slices/actionTabFunctionSlices";
 
 type FlagType = "SET_NEXT_MONTH" | "SET_PREV_MONTH";
 
 const MonthView = (): JSX.Element => {
     const calendar: Calendar = new Calendar();
     const currentDate: DayDataWithoutWeek = calendar.getFormattedDate();
+    const dispatch = useDispatch();
+
+    const dayDataContextState = useContext(DayDataContext).setState;
+    const montDataContextState = useContext(MonthDataContext);
 
     const [yearValue, setYearValue] = useState<number>(currentDate.yearValue);
     const [monthId, setMonthId] = useState<number>(currentDate.monthId);
@@ -20,8 +27,7 @@ const MonthView = (): JSX.Element => {
 
     const handleSetCurrentMonth = () => {
         setMonthId(currentDate.monthId);
-    }
-
+    };
     const handleChangeMonth = (flag: FlagType) => {
         switch (flag) {
             case "SET_NEXT_MONTH":
@@ -35,7 +41,15 @@ const MonthView = (): JSX.Element => {
             default:
                 break;
         }
-    }
+    };
+
+    useEffect(() => {
+        montDataContextState.setState(monthId);
+    }, [monthId]);
+
+    const handleDayAction = () => {
+        dispatch(executeCalendarAction({actionName: "viewAction", actionOption: "day"}));
+    };
 
     return (
         <section className="calendar__viewContainer">
@@ -60,11 +74,15 @@ const MonthView = (): JSX.Element => {
                     This Month
                 </button>
                 <div className="calendar__dayInfoContainer">
-                    <p>Nothing planned this Week</p>
+                    <p>Nothing planned this Month</p>
                 </div>
             </div>
-            <motion.section className="monthView" initial={{opacity: 0}} animate={{opacity: 1}}
-                            transition={{duration: 0.15}}>
+            <motion.section
+                className="monthView"
+                initial={{opacity: 0}}
+                animate={{opacity: 1}}
+                transition={{duration: 0.15}}
+            >
                 {weekData.map((week: WeekData, index: number) => <section
                     key={index}
                     className="monthView__weekContainer"
@@ -98,6 +116,16 @@ const MonthView = (): JSX.Element => {
                                     : (day.monthId !== monthId)
                                         ? "var(--colorBlackTransparent50)"
                                         : "var(--colorBlackTransparent75)",
+                            }}
+                            onClick={() => {
+                                dayDataContextState({
+                                    yearValue: day.yearValue,
+                                    monthId: day.monthId,
+                                    monthName: day.monthName,
+                                    dayName: day.dayName,
+                                    dayValue: day.dayValue
+                                });
+                                handleDayAction();
                             }}
                         >
                             {day.dayValue}

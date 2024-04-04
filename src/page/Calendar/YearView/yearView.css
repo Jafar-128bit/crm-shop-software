@@ -21,6 +21,7 @@
 
     overflow: hidden;
     overflow-y: auto;
+    position: relative;
 }
 
 .yearView__monthViewCalendar {

@@ -4,7 +4,7 @@
     justify-content: flex-start;
     flex-direction: column;
 
-    width: 75%;
+    width: calc(100% - 370px);
     height: 100%;
 
     position: relative;

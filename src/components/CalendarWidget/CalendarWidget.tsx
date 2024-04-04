@@ -2,47 +2,57 @@ import './calendarWidget.css';
 
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import {DayDataWithoutWeek, WeekData} from "../../type/type";
+import {DayData, DayDataWithoutWeek, MonthData, WeekData} from "../../type/type";
 import {Calendar} from "../../class/class";
-import {JSX, useState} from "react";
+import React, {JSX, useState, useContext, useEffect} from "react";
+import {DayDataContext, MonthDataContext} from "../../page/Calendar/CalendarPage";
 
 interface Month {
     id: number;
     monthName: string;
 }
 
+type HandleUpdateDayDataState = (dayData: DayData) => void;
+
 type WeekProp = {
     weekData: WeekData;
     dayData: DayDataWithoutWeek;
     currentMonthId: number;
+    onUpdateDayDataState: HandleUpdateDayDataState;
 }
 
-const btnStyle = {
+const btnStyle: { color: string, fontSize: string, fontWeight: number } = {
     color: "var(--colorBlackTransparent50)",
     fontSize: "28px",
     fontWeight: 700,
 }
 
-const Week = ({weekData, dayData, currentMonthId}: WeekProp): JSX.Element => {
+const Week = ({weekData, dayData, currentMonthId, onUpdateDayDataState}: WeekProp): JSX.Element => {
     return <section className="calendarWidget__monthContainer__weekContainer">
         {
-            weekData.dayArray.map((value, index) => <button
+            weekData.dayArray.map((value: DayData, index: number) => <button
                 key={value.dayValue + index}
                 type="button"
                 className="calendarWidget__monthContainer__dayContainer"
                 style={{
                     background: (dayData.dayValue === value.dayValue && dayData.monthId === value.monthId) ? "var(--backgroundGradient01)" : "",
-                    color: (dayData.dayValue === value.dayValue && dayData.monthId === value.monthId) ? "var(--colorWhite)" : (value.monthId !== currentMonthId) ? "var(--colorBlackTransparent50)" : "var(--colorBlack)",
+                    color: (dayData.dayValue === value.dayValue && dayData.monthId === value.monthId) ? "var(--colorWhite)" : (value.monthId !== currentMonthId)
+                        ? "var(--colorBlackTransparent50)"
+                        : "var(--colorBlack)",
                 }}
+                onClick={() => onUpdateDayDataState(value)}
             >
                 {value.dayValue >= 10 ? `${value.dayValue}` : `0${value.dayValue}`}
             </button>)
         }
     </section>
-}
+};
 
 /* TODO: Make this change month only when the month is changed */
 const CalendarWidget = (): JSX.Element => {
+    const dayDataContextState = useContext(DayDataContext).setState;
+    const montDataContextState = useContext(MonthDataContext);
+
     const calendarData = new Calendar();
     const currentDate: DayDataWithoutWeek = calendarData.getFormattedDate();
 
@@ -51,34 +61,48 @@ const CalendarWidget = (): JSX.Element => {
         id: currentDate.monthId,
         monthName: currentDate.monthName
     });
-    const [dayData, setDayData] = useState<DayDataWithoutWeek>({
-        yearValue: currentDate.yearValue,
-        monthId: month.id,
-        monthName: month.monthName,
-        dayName: currentDate.dayName,
-        dayValue: currentDate.dayValue
-    });
 
+    const getUpdatedMonth = (id: number) => {
+        const monthData: MonthData = calendarData.getCalendarData(yearValue).monthArray[id];
+        return {id, monthName: monthData.monthName};
+    };
     const handleChangeMonth = (flag: "NEXT_MONTH" | "PREV_MONTH") => {
         const currentMonth: Month = month;
-
-        const getUpdatedMonth = (id: number) => {
-            const monthData = calendarData.getCalendarData().monthArray[id];
-            return {id, monthName: monthData.monthName};
-        };
-
+        const isValidMonthId = (id: number) => id >= 0 && id < 12;
         switch (flag) {
-            case "NEXT_MONTH":
-                setMonth(getUpdatedMonth(currentMonth.id + 1));
+            case "NEXT_MONTH": {
+                const nextMonthId = currentMonth.id + 1;
+                if (isValidMonthId(nextMonthId)) {
+                    setMonth(getUpdatedMonth(nextMonthId));
+                }
                 break;
-            case "PREV_MONTH":
-                setMonth(getUpdatedMonth(currentMonth.id - 1));
+            }
+            case "PREV_MONTH": {
+                const prevMonthId = currentMonth.id - 1;
+                if (isValidMonthId(prevMonthId)) {
+                    setMonth(getUpdatedMonth(prevMonthId));
+                }
                 break;
+            }
             default:
                 break;
         }
     };
+    const handleUpdateDayDataState = (dayData: DayData) => {
+        const selectedDate: DayDataWithoutWeek = {
+            yearValue: dayData.yearValue,
+            monthId: dayData.monthId,
+            monthName: dayData.monthName,
+            dayName: dayData.dayName,
+            dayValue: dayData.dayValue
+        };
+        setMonth(getUpdatedMonth(dayData.monthId));
+        dayDataContextState(selectedDate);
+    };
 
+    useEffect(() => {
+        setMonth(getUpdatedMonth(montDataContextState.state));
+    }, [montDataContextState.state]);
 
     return (
         <div className="calendarWidget">
@@ -122,8 +146,9 @@ const CalendarWidget = (): JSX.Element => {
                             .map((value: WeekData, index: number) => <Week
                                 key={value.weekId + index}
                                 weekData={value}
-                                dayData={dayData}
+                                dayData={currentDate}
                                 currentMonthId={month.id}
+                                onUpdateDayDataState={handleUpdateDayDataState}
                             />)
                     }
                 </ul>

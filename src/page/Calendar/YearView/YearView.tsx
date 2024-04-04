@@ -1,10 +1,15 @@
 import './yearView.css';
 import {Calendar} from "../../../class/class";
-import {CalendarData, DayData, DayDataWithoutWeek, Month, MonthData, WeekData} from "../../../type/type";
-import {JSX, useState} from "react";
+import {CalendarData, DayData, DayDataWithoutWeek, MonthData, WeekData} from "../../../type/type";
+import CloseIcon from '@mui/icons-material/Close';
+import {JSX, useContext, useState} from "react";
 import {motion} from 'framer-motion';
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
+import {areObjectValuesEqual} from "../../../utils/utils";
+import {executeCalendarAction} from "../../../store/slices/actionTabFunctionSlices";
+import {DayDataContext} from "../CalendarPage";
+import {useDispatch} from "react-redux";
 
 interface PropMonthType {
     monthData: MonthData;
@@ -13,9 +18,12 @@ interface PropMonthType {
 const YearView = (): JSX.Element => {
     const calendar: Calendar = new Calendar();
     const currentDate: DayDataWithoutWeek = calendar.getFormattedDate();
+    const dispatch = useDispatch();
+    const dayDataContextState = useContext(DayDataContext);
 
     const [yearValue, setYearValue] = useState<number>(currentDate.yearValue);
     const currentCalendarData: CalendarData = calendar.getCalendarData(yearValue);
+    const [dayClickCounter, setDayClickCounter] = useState<"open_menu" | "open_dayView">("open_menu");
 
     const handleChangeYear = (flag: "PREV_YEAR" | "NEXT_YEAR") => {
         switch (flag) {
@@ -32,7 +40,28 @@ const YearView = (): JSX.Element => {
 
     const handleSetCurrentYear = () => {
         setYearValue(currentDate.yearValue);
-    }
+    };
+
+    const handleDayAction = (flag: "OPEN__MENU" | "CLOSE__MENU") => {
+        switch (flag) {
+            case "OPEN__MENU":
+                if (dayClickCounter === "open_menu") {
+                    setDayClickCounter("open_dayView");
+                    // menu action
+                } else if (dayClickCounter === "open_dayView") {
+                    //close menu
+                    setDayClickCounter("open_menu");
+                    dispatch(executeCalendarAction({actionName: "viewAction", actionOption: "day"}));
+                }
+                break;
+            case "CLOSE__MENU":
+                setDayClickCounter("open_menu");
+                // menu function
+                break;
+            default:
+                break;
+        }
+    };
 
     const MonthViewCalendar = ({monthData}: PropMonthType) => {
         return <div className="yearView__monthViewCalendar">
@@ -73,16 +102,27 @@ const YearView = (): JSX.Element => {
                                             ? "var(--colorBlackTransparent50)"
                                             : "var(--colorBlack)",
                                 }}
+                                onClick={() => {
+                                    dayDataContextState.setState({
+                                        yearValue: day.yearValue,
+                                        monthId: day.monthId,
+                                        monthName: day.monthName,
+                                        dayName: day.dayName,
+                                        dayValue: day.dayValue
+                                    });
+                                    handleDayAction("OPEN__MENU");
+                                }}
                             >
                                 {/*{day.dayValue >= 10 ? `${day.dayValue}` : `0${day.dayValue}`}*/}
                                 {day.dayValue}
                             </button>
                         )}
+
                     </section>
                 )}
             </section>
         </div>
-    }
+    };
 
     return (
         <section className="calendar__viewContainer">
@@ -106,15 +146,13 @@ const YearView = (): JSX.Element => {
                 >
                     This Year
                 </button>
-                <div className="calendar__dayInfoContainer">
-                    <p>Nothing planned this Week</p>
-                </div>
             </div>
             <motion.section
                 className="yearView"
                 initial={{opacity: 0}}
                 animate={{opacity: 1}}
-                transition={{duration: 0.15}}>
+                transition={{duration: 0.15}}
+            >
                 <section className="yearView__monthContainer noScroll">
                     {currentCalendarData.monthArray.map((month: MonthData, index: number) => <MonthViewCalendar
                         key={index}

@@ -6,9 +6,10 @@ import * as Yup from "yup";
 import {useFormik} from "formik";
 import {JSX, useEffect, useRef, useState} from 'react';
 import {useDispatch} from "react-redux";
-import {toggleSidebar} from "../../store/slices/menuSlices";
+import {toggleMenuState} from "../../store/slices/menuSlices";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {useNavigate} from "react-router-dom";
+import {ActionType} from "../../type/type";
 
 const Login = (): JSX.Element => {
     const navigate = useNavigate();
@@ -83,7 +84,7 @@ const Login = (): JSX.Element => {
         },
     ];
 
-    const handleSidebar = (): PayloadAction<boolean> => dispatch(toggleSidebar(false));
+    const handleSidebar = (): PayloadAction<ActionType> => dispatch(toggleMenuState({actionState: false, optionName: "SIDE_BAR"}));
     const handleOpenReset = (): void => setIsResetMenuOpen(!isResetMenuOpen);
 
     useEffect(() => {

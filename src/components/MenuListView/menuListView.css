@@ -1,0 +1,216 @@
+.checkBox {
+    background: var(--colorWhite);
+
+    width: max-content;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    border-radius: var(--borderRadius02);
+}
+
+.checkBox > input[type="checkbox"] {
+    display: none;
+}
+
+.checkBox > label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+    margin: 0;
+
+    cursor: pointer;
+}
+
+.batchMenuListView,
+.inventoryMenuListView,
+.productMenuListView {
+    background: var(--color10);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    width: calc(90% - 10px);
+    height: 40px;
+
+    padding: 0 5px;
+
+    border-radius: var(--borderRadius02);
+}
+
+.productMenuListView {
+    height: 50px;
+}
+
+.batchMenuListView__infoContainer,
+.inventoryMenuListView__infoContainer,
+.productMenuListView__infoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: 90%;
+    height: max-content;
+}
+
+.batchMenuListView__infoContainer > p:nth-child(1) {
+    color: var(--colorBlack);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 20%;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.batchMenuListView__infoContainer > p:nth-child(2),
+.batchMenuListView__infoContainer > p:nth-child(3) {
+    color: var(--color11);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
+    width: 40%;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.inventoryMenuListView__infoContainer__title {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc((100% / 3) - 10px);
+    height: 100%;
+}
+
+.inventoryMenuListView__infoContainer__title > p {
+    color: var(--colorBlack);
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.inventoryMenuListView__infoContainer__typeInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: 100%;
+    height: 50%;
+}
+
+.inventoryMenuListView__infoContainer__typeInfo > p {
+    color: var(--color11);
+
+    width: max-content;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 10px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.inventoryMenuListView__infoContainer > p {
+    color: var(--color11);
+
+    width: calc((100% / 3) - 10px);
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.productMenuListView__productName {
+    color: var(--color11);
+
+    width: calc((100% / 4) - 10px);
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.productMenuListView__variationDetails {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: calc((100% / 4) - 10px);
+    height: 100%;
+}
+
+.productMenuListView__variationDetails > p {
+    color: var(--color11);
+
+    width: 100%;
+    height: calc(50% - 5px);
+
+    padding: 0;
+    margin: 0;
+}
+
+.productMenuListView__variationDetails > p:nth-child(1) {
+    font-size: 10px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.productMenuListView__variationDetails > p:nth-child(2) {
+    font-size: 10px;
+    font-weight: 500;
+    text-align: left;
+}
+
+.productMenuListView__productDataInfo {
+    color: var(--color11);
+
+    width: calc((100% / 4) - 10px);
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+    text-align: left;
+}

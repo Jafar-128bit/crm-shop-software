@@ -1,0 +1,28 @@
+.inventoryDashboard {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 10px;
+
+    width: 100%;
+    height: calc(100% - 40px);
+
+    padding: 20px 0;
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.inventoryDashboard__title {
+    color: var(--colorBlack);
+
+    width:  100%;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 32px;
+    font-weight: 400;
+}

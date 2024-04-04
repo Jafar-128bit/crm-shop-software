@@ -1,0 +1,227 @@
+.transferMenu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    flex-shrink: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.transferMenu__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    flex-shrink: 0;
+
+    width: calc(100% - 20px);
+    height: 60px;
+
+    padding: 0 10px;
+}
+
+.transferMenu__titleInfo {
+    color: var(--colorBlack);
+
+    width: 30%;
+    height: max-content;
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.transferMenu__searchInput {
+    background: var(--color10);
+    color: var(--colorBlack);
+
+    width: calc(70% - 20px);
+    height: 30px;
+
+    padding: 0 10px;
+    margin: 0;
+
+    border: none;
+    outline: none;
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.transferMenu__inventoryBtnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: calc(70% - 10px);
+    height: 100%;
+}
+
+.transferMenu__listContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: 20px;
+
+    width: 100%;
+
+    padding: 10px 0;
+
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.batchDestinationMenu {
+    height: calc(100% - 60px - 60px - 20px);
+}
+
+.productDestinationMenu {
+    height: calc(100% - 60px - 60px - 60px - 20px);
+}
+
+.transferMenu__globalInventoryList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+
+    width: 100%;
+    height: max-content;
+}
+
+.transferMenu__globalInventoryList__heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: calc(100% - 30px);
+    height: 30px;
+
+    padding: 0 15px;
+}
+
+.transferMenu__globalInventoryList__heading > p {
+    color: var(--colorBlack);
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.transferMenu__globalInventoryList__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+
+    width: 50%;
+    height: max-content;
+}
+
+.transferMenu__globalInventoryList__info > p {
+    color: var(--color11);
+
+    padding: 0;
+    margin: 0;
+
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.transferMenu__globalInventoryList__batchList {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    gap: 20px;
+
+    width: 100%;
+    height: max-content;
+}
+
+.transferMenu__btnContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+
+    width: calc(100% - 20px);
+    height: 60px;
+
+    padding: 0 10px;
+}
+
+.transferMenu__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+    border-radius: var(--borderRadius02);
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.nextBtn {
+    background: var(--color15);
+    color: var(--color14);
+
+    width: 100%;
+    height: 40px;
+}
+
+.backBtn {
+    background: var(--color06);
+    color: var(--color08);
+
+    width: calc(50% - 10px);
+    height: 40px;
+}
+
+.confirmBtn {
+    background: var(--color07);
+    color: var(--color09);
+
+    width: calc(50% - 10px);
+    height: 40px;
+}
+
+.thisInventoryBtn {
+    background: var(--color07);
+    color: var(--color09);
+
+    width: calc(50% - 10px);
+    height: 30px;
+}
+
+.globalInventoryBtn {
+    background: var(--color15);
+    color: var(--color14);
+
+    width: calc(50% - 10px);
+    height: 30px;
+}
+
+.transferMenu__btn:hover {
+    background: var(--colorBlack);
+    color: var(--colorWhite);
+}
