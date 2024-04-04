@@ -1,108 +1,18 @@
 import {BatchDataList, InventoryDataList, ProductDataList} from "../type/type";
 
-export const inventoryData: InventoryDataList[] = [
-    {
-        id: 1,
-        inventoryName: 'Inventory One',
-        type: "JIT",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 2,
-        inventoryName: 'Inventory Two',
-        type: "FIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 3,
-        inventoryName: 'Inventory Three',
-        type: "LIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 4,
-        inventoryName: 'Inventory Four',
-        type: "FIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 5,
-        inventoryName: 'Inventory Five',
-        type: "JIT",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 6,
-        inventoryName: 'Inventory Six',
-        type: "FIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 7,
-        inventoryName: 'Inventory Seven',
-        type: "LIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-    {
-        id: 8,
-        inventoryName: 'Inventory Eight',
-        type: "FIFO",
-        location: 'In House',
-        batchQty: 4,
-        productQty: 214,
-        outOfStock: 18,
-        productSold: 100,
-        inventoryCost: 323,
-    },
-];
-const GetBatchData = (): BatchDataList[] => {
+const GetBatchData = (range: number): BatchDataList[] => {
     const batchData: BatchDataList[] = [];
 
     const getRandomInt = (min: number, max: number) => {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     };
 
-    for (let i = 1; i <= 80; i++) {
-        const inventoryId = getRandomInt(1, 8);
+    for (let i = 1; i <= range; i++) {
+        const inventoryId = getRandomInt(1, 24);
 
         const newBatchData: BatchDataList = {
             id: i,
-            batchId: `${i}`,
+            batchId: `#${i}`,
             inventoryId: inventoryId,
             productQty: getRandomInt(10, 50),
             outOfStock: getRandomInt(1, 20),
@@ -113,7 +23,45 @@ const GetBatchData = (): BatchDataList[] => {
 
     return batchData;
 };
-export const batchData: BatchDataList[] = GetBatchData();
+export const batchData: BatchDataList[] = GetBatchData(240);
+
+const GetInventoryData = (range: number): InventoryDataList[] => {
+    const inventoryData: InventoryDataList[] = [];
+    const getRandomInt = (min: number, max: number) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+
+    for (let i = 1; i <= range; i++) {
+        const filteredBatches: BatchDataList[] = batchData.filter(batch => batch.inventoryId === i);
+        const productQty: number = filteredBatches.reduce((acc: number, cur: BatchDataList) => acc + cur.productQty, 0);
+        const batchQty: number = filteredBatches.length;
+        const outOfStock: number = filteredBatches.reduce((acc: number, cur: BatchDataList) => acc + cur.outOfStock, 0);
+
+        const getRandomInventoryType = (): "JIT" | "FIFO" | "LIFO" => {
+            const types: ("JIT" | "FIFO" | "LIFO")[] = ["JIT", "FIFO", "LIFO"];
+            return types[getRandomInt(0, types.length - 1)];
+        };
+
+        const newInventoryData: InventoryDataList = {
+            id: i,
+            inventoryName: `Inventory ${i}`,
+            type: getRandomInventoryType(),
+            location: "In House",
+            batchQty: batchQty,
+            productQty: productQty,
+            outOfStock: outOfStock,
+            productSold: 100,
+            inventoryCost: productQty * 45,
+        };
+
+        inventoryData.push(newInventoryData);
+    }
+
+    return inventoryData;
+}
+
+export const inventoryData: InventoryDataList[] = GetInventoryData(24);
+
 export const productData: ProductDataList[] = [
     {
         id: 0,

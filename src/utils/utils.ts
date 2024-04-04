@@ -1,6 +1,34 @@
 import {DayData, NodeDataType, TaskData} from "../type/type";
 import {OptionTree} from "../class/class";
 
+import {Slide, toast, ToastOptions} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const toastOptions:  ToastOptions<unknown> = {
+    position: "top-center",
+    autoClose: 2000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "light",
+    transition: Slide,
+    className: "notificationStyle",
+};
+
+export const showWarningNotification = (message: string) => {
+    toast.warn(message, toastOptions);
+};
+
+export const showPromiseNotification = (promise: Promise<void>, pending: string, error: string, success: string) => {
+    toast.promise(promise, {
+        pending: pending,
+        error: error,
+        success: success
+    }, toastOptions);
+};
+
 export const handleSelectDayName = (dayIndex: number): string => {
     switch (dayIndex) {
         case 0:

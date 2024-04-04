@@ -1,9 +1,13 @@
 import './transferMenu.css';
-import React, {JSX, useContext, useState} from "react";
+
 import MenuListView from "../../MenuListView/MenuListView";
 import {BatchDataList, InventoryDataList, ProductDataList, TransferContextProviderProps} from "../../../type/type";
 import {createTransferDataContext} from "../../../Context/TransferDataContext";
 import {batchData, inventoryData, productData} from "../../../data/data";
+
+import React, {JSX, useContext, useEffect, useState} from "react";
+import {Params, useParams} from "react-router-dom";
+import {showPromiseNotification, showWarningNotification} from "../../../utils/utils";
 
 type BatchIdDataType = {
     batchId: string[];
@@ -32,27 +36,71 @@ const TransferProductDataContext: TransferProductDataContextType = ({children, i
     </ProductDataContext.Provider>
 };
 
-/* TODO:
-*   1. Add condition if no transfer data is selected
-*   2. This Inventory should be called with current inventory Id and return only current inventory batches using filter method
-*   3. Search Hook that can be use every where */
+/* TODO: Search Hook that can be use every where :  */
 
 const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "productTransfer" }): JSX.Element | null => {
+    const param: Readonly<Params<string>> = useParams();
+    const currentInventoryId: number = parseInt(param.id as string);
+
     const [showDestinationList, setShowDestinationList] = useState<boolean>(false);
     const [isGlobalInventory, setIsGlobalInventory] = useState<boolean>(false);
 
-    const handleShowDestinationList = (): void => {
-        setShowDestinationList(true);
+    const [isBatchIdEmpty, setIsBatchIdEmpty] = useState<boolean>(true);
+    const [isProductIdEmpty, setIsProductIdEmpty] = useState<boolean>(true);
+    const [isBatchIdSelected, setIsBatchIdSelected] = useState<boolean>(true);
+    const [isInventoryIdSelected, setIsInventoryIdSelected] = useState<boolean>(true);
+
+    const handleNextAction = (action: string, transferType?: "batch" | "product"): void => {
+        switch (action) {
+            case "showDestinationList":
+                switch (transferType) {
+                    case "batch":
+                        if (isBatchIdEmpty) showWarningNotification("Select Batches To Transfer!");
+                        else setShowDestinationList(true);
+                        break;
+                    case "product":
+                        if (isProductIdEmpty) showWarningNotification("Select Products To Transfer!");
+                        else setShowDestinationList(true);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case "showTransferList":
+                setShowDestinationList(false);
+                break;
+            case "showGlobalInventory":
+                setIsGlobalInventory(true);
+                break;
+            case "hideGlobalInventory":
+                setIsGlobalInventory(false);
+                break;
+            default:
+                break;
+        }
     };
-    const handleShowTransferList = (): void => {
-        setShowDestinationList(false);
+    const handleConfirmAction = (action: string) => {
+
+        const confirmPromise: Promise<void> = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 3000);
+        });
+
+        switch (action) {
+            case "confirmBatchTransfer":
+                if (isInventoryIdSelected) showWarningNotification("Select an Inventory!");
+                else showPromiseNotification(confirmPromise, "Transferring Batches", "Transferring Failed", "Batches Transferred Successfully");
+                break;
+            case "confirmProductTransfer":
+                if (isBatchIdSelected) showWarningNotification("Select a Batch!");
+                else showPromiseNotification(confirmPromise, "Transferring Products", "Transferring Failed", "Products Transferred Successfully");
+                break;
+            default:
+                break;
+        }
     };
-    const handleShowGlobalInventory = (): void => {
-        setIsGlobalInventory(true);
-    };
-    const handleHideGlobalInventory = (): void => {
-        setIsGlobalInventory(false);
-    };
+
 
     switch (transferType) {
         case "batchTransfer":
@@ -63,18 +111,20 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                         <input className="transferMenu__searchInput" type="text" placeholder="Search batch..."/>
                     </section>
                     <section className="transferMenu__listContainer batchDestinationMenu noScroll">
-                        {batchData.map((value: BatchDataList, index: number) => <MenuListView
-                            key={index}
-                            viewType="batch"
-                            data={value}
-                            listType="transferList"
-                        />)}
+                        {batchData.filter((batch: BatchDataList, index: number) => batch.inventoryId === currentInventoryId)
+                            .map((value: BatchDataList, index: number) => <MenuListView
+                                key={index}
+                                viewType="batch"
+                                data={value}
+                                listType="transferList"
+                                setIsBatchIdEmpty={setIsBatchIdEmpty}
+                            />)}
                     </section>
                     <section className="transferMenu__btnContainer">
                         <button
                             type="button"
                             className="transferMenu__btn nextBtn"
-                            onClick={handleShowDestinationList}
+                            onClick={() => handleNextAction("showDestinationList", "batch")}
                         >
                             Next
                         </button>
@@ -92,19 +142,21 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                             key={index}
                             viewType="inventory"
                             data={value}
+                            setIsInventoryIdSelected={setIsInventoryIdSelected}
                         />)}
                     </section>
                     <section className="transferMenu__btnContainer">
                         <button
                             type="button"
                             className="transferMenu__btn backBtn"
-                            onClick={handleShowTransferList}
+                            onClick={() => handleNextAction("showTransferList")}
                         >
                             Back
                         </button>
                         <button
                             type="button"
                             className="transferMenu__btn confirmBtn"
+                            onClick={() => handleConfirmAction("confirmBatchTransfer")}
                         >
                             Confirm
                         </button>
@@ -130,13 +182,14 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                             key={index}
                             viewType="product"
                             data={value}
+                            setIsProductIdEmpty={setIsProductIdEmpty}
                         />)}
                     </section>
                     <section className="transferMenu__btnContainer">
                         <button
                             type="button"
                             className="transferMenu__btn nextBtn"
-                            onClick={handleShowDestinationList}
+                            onClick={() => handleNextAction("showDestinationList", "product")}
                         >
                             Next
                         </button>
@@ -151,7 +204,7 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                             <button
                                 type="button"
                                 className="transferMenu__btn thisInventoryBtn"
-                                onClick={handleHideGlobalInventory}
+                                onClick={() => handleNextAction("hideGlobalInventory")}
                                 style={{
                                     background: isGlobalInventory ? "" : "var(--colorBlack)",
                                     color: isGlobalInventory ? "" : "var(--colorWhite)",
@@ -162,7 +215,7 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                             <button
                                 type="button"
                                 className="transferMenu__btn globalInventoryBtn"
-                                onClick={handleShowGlobalInventory}
+                                onClick={() => handleNextAction("showGlobalInventory")}
                                 style={{
                                     background: isGlobalInventory ? "var(--colorBlack)" : "",
                                     color: isGlobalInventory ? "var(--colorWhite)" : "",
@@ -196,30 +249,34 @@ const TransferMenu = ({transferType}: { transferType: "batchTransfer" | "product
                                             viewType="batch"
                                             data={value}
                                             listType="destinationList"
+                                            setIsBatchIdSelected={setIsBatchIdSelected}
                                         />)}
                                 </section>
                             </div>)}
                         </section>
                         : <section className="transferMenu__listContainer productDestinationMenu noScroll">
-                            {batchData.map((value: BatchDataList, index: number) => <MenuListView
-                                key={index}
-                                viewType="batch"
-                                data={value}
-                                listType="destinationList"
-                            />)}
+                            {batchData.filter((batch: BatchDataList, index: number) => batch.inventoryId === currentInventoryId)
+                                .map((value: BatchDataList, index: number) => <MenuListView
+                                    key={index}
+                                    viewType="batch"
+                                    data={value}
+                                    listType="destinationList"
+                                    setIsBatchIdSelected={setIsBatchIdSelected}
+                                />)}
                         </section>
                     }
                     <section className="transferMenu__btnContainer">
                         <button
                             type="button"
                             className="transferMenu__btn backBtn"
-                            onClick={handleShowTransferList}
+                            onClick={() => handleNextAction("showTransferList")}
                         >
                             Back
                         </button>
                         <button
                             type="button"
                             className="transferMenu__btn confirmBtn"
+                            onClick={() => handleConfirmAction("confirmProductTransfer")}
                         >
                             Confirm
                         </button>

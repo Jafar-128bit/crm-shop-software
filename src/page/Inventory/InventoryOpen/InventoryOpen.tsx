@@ -6,17 +6,17 @@ import SearchIcon from '@mui/icons-material/Search';
 import {Params, useParams, useNavigate} from 'react-router-dom';
 import {type JSX, useState} from "react";
 import BatchListBox from "../../../components/BatchListBox/BatchListBox";
-import {BatchDataList, optionType, SortOptionType} from "../../../type/type";
+import {BatchDataList, InventoryDataList, optionType, SortOptionType} from "../../../type/type";
 import InventoryCharts from "../../../components/InventoryCharts/InventoryCharts";
 import InventoryInfoTable from "../../../components/InventoryInfoTable/InventoryInfoTable";
 import SortByMenu from "../../../components/SortByMenu/SortByMenu";
 import {useDispatch} from "react-redux";
 import {toggleMenuState} from "../../../store/slices/menuSlices";
-import {batchData} from "../../../data/data";
+import {batchData, inventoryData} from "../../../data/data";
 
 interface InventoryDataType {
     title: string;
-    data: number;
+    data?: number;
     type: "units" | "₹";
     color: "var(--color08)" | "var(--color09)" | "var(--colorBlack)"
 }
@@ -25,13 +25,6 @@ const iconStyle = {
     fontSize: "18px",
     fontWeight: "500",
 };
-const inventoryData: InventoryDataType[] = [
-    {title: "Batch Quantity", data: 23, type: "units", color: "var(--colorBlack)"},
-    {title: "Product Quantity", data: 124, type: "units", color: "var(--colorBlack)"},
-    {title: "Out Of Stock", data: 11, type: "units", color: "var(--color08)"},
-    {title: "Product Sold", data: 115, type: "units", color: "var(--color09)"},
-    {title: "Inventory Cost", data: 325, type: "₹", color: "var(--colorBlack)"},
-];
 const sortByData: SortOptionType[] = [
     {sortOption: "Batch Id", sortAction: null},
     {sortOption: "Product Quantity", sortAction: null},
@@ -40,6 +33,18 @@ const sortByData: SortOptionType[] = [
 
 const InventoryOpen = (): JSX.Element => {
     const param: Readonly<Params<string>> = useParams();
+    const inventoryId: number = parseInt(param.id as string);
+
+    const currentInventoryData: InventoryDataList | undefined = inventoryData.find((inventory: InventoryDataList) => inventory.id === inventoryId);
+
+    const inventoryWidgetData: InventoryDataType[] = [
+        {title: "Batch Quantity", data: currentInventoryData?.batchQty, type: "units", color: "var(--colorBlack)"},
+        {title: "Product Quantity", data: currentInventoryData?.productQty, type: "units", color: "var(--colorBlack)"},
+        {title: "Out Of Stock", data: currentInventoryData?.outOfStock, type: "units", color: "var(--color08)"},
+        {title: "Product Sold", data: currentInventoryData?.productSold, type: "units", color: "var(--color09)"},
+        {title: "Inventory Cost", data: currentInventoryData?.inventoryCost, type: "₹", color: "var(--colorBlack)"},
+    ];
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [view, setView] = useState<"batchListView" | "infoView">("batchListView");
@@ -62,14 +67,15 @@ const InventoryOpen = (): JSX.Element => {
         switch (view) {
             case "batchListView":
                 return <section className="inventoryOpen__viewWrapper noScroll">
-                    {batchData.map((value: BatchDataList, index: number) => <BatchListBox
-                        key={index}
-                        id={value.id}
-                        batchId={value.batchId}
-                        inventoryId={value.inventoryId}
-                        productQty={value.productQty}
-                        outOfStock={value.outOfStock}/>
-                    )}
+                    {batchData.filter((batch: BatchDataList, index: number) => batch.inventoryId === inventoryId)
+                        .map((value: BatchDataList, index: number) => <BatchListBox
+                            key={index}
+                            id={value.id}
+                            batchId={value.batchId}
+                            inventoryId={value.inventoryId}
+                            productQty={value.productQty}
+                            outOfStock={value.outOfStock}/>
+                        )}
                 </section>;
             case "infoView":
                 return <section className="inventoryOpen__viewWrapper noScroll">
@@ -90,13 +96,13 @@ const InventoryOpen = (): JSX.Element => {
                 <input type="text" placeholder="Search"/>
             </div>
             <div className="inventoryOpen__infoWidget">
-                <h1 className="inventoryOpen__infoWidget__title">Inventory Name</h1>
+                <h1 className="inventoryOpen__infoWidget__title">{currentInventoryData?.inventoryName}</h1>
                 <div className="inventoryOpen__infoWidget__titleInfo">
-                    <p>Type JIT</p>
-                    <p>Location In house</p>
+                    <p>Type <strong>{currentInventoryData?.type}</strong></p>
+                    <p>Location <strong>{currentInventoryData?.location}</strong></p>
                 </div>
                 <div className="inventoryOpen__infoWidget__separator"/>
-                {inventoryData.map((value: InventoryDataType, index: number) => <div
+                {inventoryWidgetData.map((value: InventoryDataType, index: number) => <div
                     key={index}
                     className="inventoryOpen__infoWidget__infoText"
                 >

@@ -8,10 +8,10 @@ import PopUps from "./components/PopUps/PopUps";
 import CalendarProperties from "./components/PopUps/CalendarProperties/CalendarProperties";
 import {useSelector} from "react-redux";
 import {motion} from 'framer-motion';
+import { ToastContainer } from "react-toastify";
 
 function App(): JSX.Element {
     const isSidebarOpen = useSelector((state: any) => state.menuSlice.sidebarState);
-
     const sidebarAreaAnimation = {
         animate: {
             width: !isSidebarOpen ? "calc(100% - 110px - 15px)" : "calc(100% - 400px - 15px)",
@@ -23,6 +23,7 @@ function App(): JSX.Element {
 
     return (
         <main className="app">
+            <ToastContainer/>
             <Sidebar/>
             <motion.section className="app__container" variants={sidebarAreaAnimation} animate="animate">
                 <TopInfoBar/>

@@ -32,9 +32,9 @@ const InventoryList = (): JSX.Element => {
     return <section className="inventoryList">
         <section className="inventoryList__headingContainer">
             <h1 className="inventoryList__title">Inventory List</h1>
-            <h4 className="inventoryList__inventoryInfo">Total Inventory <span>15</span></h4>
-            <h4 className="inventoryList__inventoryInfo">Total Batches <span>150</span></h4>
-            <h4 className="inventoryList__inventoryInfo">Total Products <span>4512</span></h4>
+            <h4 className="inventoryList__inventoryInfo">Total Inventory <span>{inventoryData.length}</span></h4>
+            <h4 className="inventoryList__inventoryInfo">Total Batches <span>{inventoryData.reduce((acc: number, cur: InventoryDataList) => acc + cur.batchQty, 0)}</span></h4>
+            <h4 className="inventoryList__inventoryInfo">Total Products <span>{inventoryData.reduce((acc: number, cur: InventoryDataList) => acc + cur.productQty, 0)}</span></h4>
 
             <div className="inventoryList__headingActionContainer">
                 <button type="button" className="inventoryList__backBtn" onClick={handleBackToDashboard}>

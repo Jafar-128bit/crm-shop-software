@@ -2,7 +2,7 @@ import './menuListView.css';
 
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
-import React, {JSX, useContext, useState} from "react";
+import React, {JSX, useContext, useEffect, useState} from "react";
 import {BatchDataList, InventoryDataList, ProductDataList} from "../../type/type";
 import {BatchDataContext, ProductDataContext} from "../Menu/TransferMenu/TransferMenu";
 
@@ -10,6 +10,10 @@ type ListViewType = {
     viewType: "inventory" | "batch" | "product";
     data: InventoryDataList | BatchDataList | ProductDataList;
     listType?: "transferList" | "destinationList";
+    setIsBatchIdEmpty?: (flag: boolean) => void;
+    setIsProductIdEmpty?: (flag: boolean) => void;
+    setIsBatchIdSelected?: (flag: boolean) => void;
+    setIsInventoryIdSelected?: (flag: boolean) => void;
 }
 
 const IconStyle = {
@@ -173,7 +177,41 @@ const ProductListView = ({productData}: {
     </div>
 };
 
-const MenuListView = ({viewType, data, listType}: ListViewType): JSX.Element | null => {
+const MenuListView = ({
+                          viewType,
+                          data,
+                          listType,
+                          setIsBatchIdEmpty,
+                          setIsProductIdEmpty,
+                          setIsBatchIdSelected,
+                          setIsInventoryIdSelected
+                      }: ListViewType): JSX.Element | null => {
+
+    const batchDataState = useContext(BatchDataContext).state;
+    const productDataState = useContext(ProductDataContext).state;
+
+    useEffect(() => {
+        if (setIsBatchIdEmpty) {
+            if (batchDataState.batchId.length === 0) setIsBatchIdEmpty(true);
+            else setIsBatchIdEmpty(false);
+        }
+
+        if (setIsProductIdEmpty) {
+            if (productDataState.productId.length === 0) setIsProductIdEmpty(true);
+            else setIsProductIdEmpty(false);
+        }
+
+        if (setIsBatchIdSelected) {
+            if (productDataState.batchId === null) setIsBatchIdSelected(true);
+            else setIsBatchIdSelected(false);
+        }
+
+        if (setIsInventoryIdSelected) {
+            if (batchDataState.inventoryId === null) setIsInventoryIdSelected(true);
+            else setIsInventoryIdSelected(false);
+        }
+    }, [batchDataState, productDataState]);
+
     switch (viewType) {
         case "inventory":
             return <InventoryListView inventoryData={data as InventoryDataList}/>;
